@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -9,10 +9,11 @@
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/custom.css" rel="stylesheet">
 
-    </head>    
+    </head>
+    <?php require( "../includes/functions.php" );?>
     <body class="home-container">
         <!-- Modal -->
-        <form id="register-form" method="POST" name="register_form" enctype="multipart/form-data" onchange="return validar_email(this)">
+        <form id="register-form" method="POST" name="register_form" enctype="multipart/form-data">
             <div class="modal fade" id="registrar" role="dialog" data-backdrop="static">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -40,10 +41,11 @@
                                 <div class="col col-md-6 col-sm-6 align-center">
                                     <div class="form-group">
                                         <label for="foto">Foto de perfil</label>
-                                        <div class="form-group margin-16">
+                                        <!--<div class="form-group margin-16">
                                             <img src="../img/logo.png" class="img-fluid size-100" id="foto" name="foto"/>
                                         </div>
-                                        <button type="button" class="btn btn-warning margin-16 padding-16 padding-sides-16">Elegir foto</button>
+                                        <button type="button" class="btn btn-warning margin-16 padding-16 padding-sides-16">Elegir foto</button>-->
+                                       <input name="foto" id="foto" type="file">
                                     </div>
                                 </div>                            
                             </div>
@@ -109,10 +111,7 @@
         <div class="container">
             <div class="row">
                 <div class="col col-md-5">
-                    <?php 
-                        require_once( "../includes/functions.php" );
-                        ver_listado();
-                    ?>
+                    <?php ver_listado();?>
                 </div>
                 <div class="col col-md-7">
                     <div class="row">

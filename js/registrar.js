@@ -35,11 +35,48 @@ function validar_telefono(e){
 
 $('document').ready(function(){ 
     $("#register-form").validate({
-		submitHandler: submitForm 
+		submitHandler: submitImage 
     });
     
-	function submitForm(){  
+
+    function submitImage(image){
+
+    	var formData = new FormData(image);
+    	if(!image){
+    		submitForm();
+    		return;
+    	};
+        $.ajax({
+            type:'POST',
+            url: '../process/process_upload.php',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success:function(img_path){
+            	submitForm(img_path);
+                console.log("success");
+                console.log(img_path);
+            },
+            error: function(data){
+                console.log("error");
+                $("#error-register").fadeIn(1000, function(){
+					$("#error-register").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>No se pudo subir la imagen</span></div>');
+				});
+                console.log(data);
+            }
+        });
+
+    }
+
+
+
+	function submitForm(img){ 
+
+
+
 		var data = $("#register-form").serialize();
+		data = data+"&image="+img;
 		
 		$.ajax({		
 			type : 'POST',
