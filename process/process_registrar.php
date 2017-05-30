@@ -25,7 +25,7 @@
 	}
   
 	if (isset($_POST['password'], $_POST['repeat-pass'], $_POST['nombre'], $_POST['apellido'], $_POST['email'],  $_POST['fnac'], $_POST['telefono'])){		
-		if(isset($_POST['image'])){
+		if(isset($_POST['image']) && ($_POST['image'] != 'undefined')){
 			$img = trim($_POST['image']);
 		} else {
 			$img = '../img/logo.png';

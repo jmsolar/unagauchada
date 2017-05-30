@@ -41,11 +41,12 @@ $('document').ready(function(){
 
     function submitImage(image){
 
-    	var formData = new FormData(image);
-    	if(!image){
+    	
+    	if(!$('#foto').val()){
     		submitForm();
     		return;
     	};
+    	var formData = new FormData(image);
         $.ajax({
             type:'POST',
             url: '../process/process_upload.php',
