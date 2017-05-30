@@ -48,10 +48,10 @@
 			return -1;
 	}
 
-	function publicar($titulo, $descripcion, $fecVencimiento, $categoria,/*$imagen,*/ $ciudad, $email, $mysqli){
+	function publicar($titulo, $descripcion, $fecVencimiento, $categoria,$imagen, $ciudad, $email, $mysqli){
 		$fnac=date("Y-m-d", strtotime($fecVencimiento));
 		$res=intval(idUsuario($email, $mysqli));
-		if ($stmt=$mysqli->prepare("INSERT INTO Gauchada(`titulo`, `descripcion`, `fechaCreacion`, `fechaVencimiento`, `imagen`, `ciudad`, `estado`, `idUsuario`, `idCandidato`) VALUES('$titulo', '$descripcion', CURDATE(), '$fecVencimiento', NULL, '$ciudad', 'activa', ?, NULL)")){
+		if ($stmt=$mysqli->prepare("INSERT INTO Gauchada(`titulo`, `descripcion`, `fechaCreacion`, `fechaVencimiento`, `imagen`, `ciudad`, `estado`, `idUsuario`, `idCandidato`) VALUES('$titulo', '$descripcion', CURDATE(), '$fecVencimiento', $imagen, '$ciudad', 'activa', ?, NULL)")){
 			$stmt->bind_param('i', $res);
 			$stmt->execute();    // Ejecuta la consulta preparada
 			$stmt->close();
@@ -126,6 +126,11 @@
 	}
 
 	if (isset($_POST['titulo'], $_POST['descripcion'], $_POST['fecVencimiento'], $_POST['categoria'], $_POST['ciudad'])) {
+		if(isset($_POST['image']) && ($_POST['image'] != 'undefined')){
+			$imagen = trim($_POST['image']);
+		} else {
+			$imagen = '../img/logo.png';
+		}
 		$titulo=trim($_POST['titulo']);
 		$descripcion=trim($_POST['descripcion']);
 		$fecVencimiento=trim($_POST['fecVencimiento']);
@@ -138,7 +143,7 @@
 
 		if (tiene_credito($email, $mysqli)){
 			if (!tiene_publicacion_pendiente($email, $mysqli)){
-				if (publicar($titulo, $descripcion, $fecVencimiento, $categoria,/*$imagen,*/ $ciudad, $email, $mysqli)){
+				if (publicar($titulo, $descripcion, $fecVencimiento, $categoria,$imagen, $ciudad, $email, $mysqli)){
 					actualizar_creditos($email, $mysqli);
 					cargar_categoria($categoria, $email, $mysqli);
 					echo "Publicacion exitosa";

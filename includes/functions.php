@@ -2,7 +2,6 @@
 
 	function ver_listado(){
 		include_once 'db_connect.php';
-
 		if ($stmt=$mysqli->prepare("SELECT COUNT(idGauchada) FROM Gauchada WHERE estado = ?")){
 			$estado='activa';
 			$stmt->bind_param('s', $estado);
@@ -33,6 +32,12 @@
 							$stmt->store_result();
 							$stmt->bind_result($postulantes);
 							$stmt->fetch();
+							if($row["imagen"]){
+								$imagen = $row["imagen"];
+							}else{
+								$imagen = "../img/logo.png";
+							}
+							 
 							echo '<div class="col col-md-12 background-color-grey padding-16 margin-bottom-16">            
 		                    		<div class="list-group">
 			                        	<h4 class="list-group-item-heading padding-16">'.$row["titulo"].'</h4>
@@ -45,38 +50,27 @@
 				                                    <div class="row">Ciudad: '.$row["ciudad"].'</div>
 				                                </div>
 				                                <div class="col col-md-4 padding-16 padding-top-0">
-				                                    <img src="../img/logo.png" class="size-75 img-fluid"/>
+				                                    <img src="'.$imagen.'" class="size-75 img-fluid" width="100px"/>
 				                                </div>
 				                            </div>
 				                        </div>
 				                        <hr class="no-margin">
 				                    </div>';
-				            echo "
-				            <form id='detalle-form' name='detalle_form' action='../html/detalle.php' method='POST'>
-				                <button type='submit' class='btn btn-default'>Ver gauchada</button>
-				             </form>";
-				            echo "</div>";
+				            $titulo=addslashes($row["titulo"]);
+				            $fVencimiento=$row["fechaVencimiento"];
+				            $nombre=$row["nombre"];
+				            $apellido=$row["apellido"];
+				            $ciudad=$row["ciudad"];
+				            echo '
+				                    <form action="detalle.php" method="POST">
+				                    	<button type="button" class="btn btn-default" onclick="return enviar_datos('.$idGauchada.' , '.$row["idGauchada"].');">Ver gauchada</button>
+				                    </form>
+				                </div>';
 				        }
 			        }
 				}
 			}
 		}
-	}	
-
-
-	/*onclick='enviar_datos(\"$titulo\", \"$descripcion\", \"$fVencimiento\", \"$nombre\", \"$apellido\", \"$ciudad\", \"$postulantes\")'*/
-	/*
-				            $titulo=$row["titulo"];
-				            $descripcion=$row["descripcion"];
-				            $fVencimiento=$row["fechaVencimiento"];
-				            $nombre=$row["nombre"];
-				            $apellido=$row["apellido"];
-				            $ciudad=$row["ciudad"];							
-							$_SESSION["titulo"]=$titulo;
-							$_SESSION["descripcion"]=$descripcion;
-							$_SESSION["fVencimiento"]=$fVencimiento;
-							$_SESSION["nombre"]=$nombre;
-							$_SESSION["apellido"]=$apellido;
-							$_SESSION["ciudad"]=$ciudad;
-							$_SESSION["postulantes"]=$postulantes;
-	*/
+	}
+	/*'.$idGauchada.' ';echo', '.$row["titulo"].' ';echo', '.$row["descripcion"].' ';echo', '.$row["fechaVencimiento"].' ';echo', '.$row["imagen"].' ';echo', '.$row["ciudad"].' ';echo', '.$postulantes.' ';echo', '.$row["nombre"].' ';echo', '.$row["apellido"].'*/
+	/*, '.$fVencimiento.' , '.$nombre.' , '.$apellido.' , '.$ciudad.'*/

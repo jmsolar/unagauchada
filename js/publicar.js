@@ -1,12 +1,45 @@
 $('document').ready(function(){ 
     $("#publicar-form").validate({
-		submitHandler: submitForm 
+		submitHandler: submitImage
     });
     
+
+     function submitImage(image){
+
+    	
+    	if(!$('#foto').val()){
+    		submitForm();
+    		return;
+    	};
+    	var formData = new FormData(image);
+        $.ajax({
+            type:'POST',
+            url: '../process/process_upload.php',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success:function(img_path){
+            	submitForm(img_path);
+                console.log("success");
+                console.log(img_path);
+            },
+            error: function(data){
+                console.log("error");
+                $("#error-register").fadeIn(1000, function(){
+					$("#error-register").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>No se pudo subir la imagen</span></div>');
+				});
+                console.log(data);
+            }
+        });
+
+    }
+
     /* login submit */
-    function submitForm(){  
+    function submitForm(img){  
 		var data = $("#publicar-form").serialize();
-		    	
+		data = data+"&image="+img;
+
 		$.ajax({		
 			type : 'POST',
 			url  : '../process/process_publicar.php',
