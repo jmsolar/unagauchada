@@ -2,9 +2,7 @@
 
 	function ver_listado(){
 		include_once 'db_connect.php';
-		if ($stmt=$mysqli->prepare("SELECT COUNT(idGauchada) FROM Gauchada WHERE estado = ?")){
-			$estado='activa';
-			$stmt->bind_param('s', $estado);
+		if ($stmt=$mysqli->prepare("SELECT COUNT(idGauchada) FROM Gauchada WHERE estado = 'activa' AND fechaVencimiento >= CURDATE()")){
 			$stmt->execute();    // Ejecuta la consulta preparada.
 			$stmt->store_result();
 			$stmt->bind_result($idGauchada);
@@ -14,9 +12,7 @@
 				echo '<div class="alert alert-warning"><strong>Información: </strong><span>En este momento no hay publicaciones activas</span></div>';
 			}
 			else{				
-				if ($stmt=$mysqli->prepare("SELECT idGauchada, titulo, descripcion, fechaVencimiento, imagen, ciudad, u.nombre, u.apellido, u.idUsuario FROM Gauchada g INNER JOIN Usuario u ON g.idUsuario=u.idUsuario WHERE estado = ? ORDER BY fechaCreacion")){
-					$estado='activa';
-					$stmt->bind_param('s', $estado);
+				if ($stmt=$mysqli->prepare("SELECT idGauchada, titulo, descripcion, fechaVencimiento, imagen, ciudad, u.nombre, u.apellido, u.idUsuario FROM Gauchada g INNER JOIN Usuario u ON g.idUsuario=u.idUsuario WHERE estado = 'activa' AND fechaVencimiento >= CURDATE()  ORDER BY fechaCreacion")){
 					$stmt->execute();    // Ejecuta la consulta preparada.
 					$res = $stmt->get_result();
 					
@@ -74,3 +70,9 @@
 	}
 	/*'.$idGauchada.' ';echo', '.$row["titulo"].' ';echo', '.$row["descripcion"].' ';echo', '.$row["fechaVencimiento"].' ';echo', '.$row["imagen"].' ';echo', '.$row["ciudad"].' ';echo', '.$postulantes.' ';echo', '.$row["nombre"].' ';echo', '.$row["apellido"].'*/
 	/*, '.$fVencimiento.' , '.$nombre.' , '.$apellido.' , '.$ciudad.'*/
+
+
+	function usuario_logueado(){
+		session_start();
+		echo '<b>'.$_SESSION["email"].'</b>';
+	}

@@ -34,18 +34,21 @@
 	}
 
 	function esValida($tarjeta, $idUsuario, $mysqli){
-		if ($stmt=$mysqli->prepare("SELECT numero FROM Tarjeta WHERE idUsuario = ?")){
-			$stmt->bind_param('i', $idUsuario);
-			$stmt->execute();
-			$stmt->store_result();
-			$stmt->bind_result($numero);
-			$stmt->fetch();
-			$stmt->close();			
-			if ($tarjeta != $numero)
-				return false;
-			else
-				return true;
-		}
+		if ($stmt=$mysqli->prepare("SELECT COUNT(numero) FROM Tarjeta WHERE idUsuario = '$idUsuario' LIMIT 1")){
+				$stmt = $stmt->execute();			
+				if ($stmt == 1){
+					return true;
+				} else {
+					if ($stmt=$mysqli->prepare("INSERT INTO tarjeta(`numero`, `saldo`, `idusuario`) VALUES('$tarjeta', 5000, '$idUsuario')")) {
+					$stmt->execute();    // Ejecuta la consulta preparada.
+					$stmt->store_result();
+					$stmt->bind_result($idUsuario);
+					$stmt->fetch();
+					$stmt->close();
+					return true;
+				}
+			}
+		} 
 	}
 
 	function tieneSaldo($tarjeta, $credito, $mysqli){
@@ -87,6 +90,22 @@
 		return false;
 	}
 
+	function actualizar_credito($credito, $idUsuario, $mysqli){
+		if ($stmt=$mysqli->prepare("SELECT cantCreditos FROM Usuario WHERE idUsuario = ?")){
+			$stmt->bind_param('s', $idUsuario);
+			$stmt = $stmt->execute();    // Ejecuta la consulta preparada.
+			$credito = $credito + $stmt;
+			if ($stmt=$mysqli->prepare("UPDATE Usuario SET `cantCreditos` = ? WHERE idUsuario = ?")){
+				$stmt->bind_param('ds', $credito, $idUsuario);
+				$stmt->execute();    // Ejecuta la consulta preparada.
+				$stmt->close();
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+
 	if (isset($_POST['tarjeta'], $_POST['credito'])) {
 		$tarjeta = trim($_POST['tarjeta']);
 		$credito = trim($_POST['credito']);
@@ -96,8 +115,10 @@
 		$idUsuario=intval(idUsuario($email, $mysqli));
 		if (esValida($tarjeta, $idUsuario, $mysqli)){ // Tarjeta valida
 			if (tieneSaldo($tarjeta, $credito, $mysqli)){
-				actualizar_saldo($tarjeta, $credito, $mysqli);
-				echo "Compra exitosa";
+				if(actualizar_saldo($tarjeta, $credito, $mysqli)){
+					actualizar_credito($credito, $idUsuario, $mysqli);
+					echo "Compra exitosa";
+				}
 			}
 			else
 				echo "No tiene saldo suficiente";

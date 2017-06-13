@@ -9,7 +9,7 @@
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/custom.css" rel="stylesheet">
     </head>
-
+<?php require( "../includes/functions.php" );?>
     <body class="home-container">
 
         <nav class="navbar navbar-inverse no-border-radius">
@@ -26,11 +26,14 @@
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
+                        <li><a href="home.php"><?php usuario_logueado(); ?></a></li>
                         <li><a href="home.php">Cerrar sesión</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
+
+
 
         <form id="publicar-form" method="POST" name="publicar_form" enctype="multipart/form-data">
             <div class="modal fade" id="publicar" role="dialog" data-backdrop="static">
@@ -139,6 +142,7 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/publicar.js"></script>
     <script src="../js/comprar.js"></script>
+    <script src="../js/userData.js"></script>
     <script src="../js/jquery.validate.min.js"></script>
     </body>
 </html>

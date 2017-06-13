@@ -15,6 +15,7 @@ function validar_tarjeta(e){
         return true;        
     patron =/[0-9]/;// Patron de entrada, en este caso solo acepta numeros
     tecla_final = String.fromCharCode(tecla);
+    console.log('tarjeta valida? ', patron.test(tecla_final));
     return patron.test(tecla_final);
 }
 

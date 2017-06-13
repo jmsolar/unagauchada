@@ -51,7 +51,7 @@
 	function publicar($titulo, $descripcion, $fecVencimiento, $categoria,$imagen, $ciudad, $email, $mysqli){
 		$fnac=date("Y-m-d", strtotime($fecVencimiento));
 		$res=intval(idUsuario($email, $mysqli));
-		if ($stmt=$mysqli->prepare("INSERT INTO Gauchada(`titulo`, `descripcion`, `fechaCreacion`, `fechaVencimiento`, `imagen`, `ciudad`, `estado`, `idUsuario`, `idCandidato`) VALUES('$titulo', '$descripcion', CURDATE(), '$fecVencimiento', $imagen, '$ciudad', 'activa', ?, NULL)")){
+		if ($stmt=$mysqli->prepare("INSERT INTO Gauchada (`titulo`, `descripcion`, `fechaCreacion`, `fechaVencimiento`, `imagen`, `ciudad`, `estado`, `idUsuario`, `idCandidato`) VALUES ('$titulo', '$descripcion', CURDATE(), '$fecVencimiento', '$imagen', '$ciudad', 'activa', ?, NULL)")){
 			$stmt->bind_param('i', $res);
 			$stmt->execute();    // Ejecuta la consulta preparada
 			$stmt->close();
@@ -143,11 +143,14 @@
 
 		if (tiene_credito($email, $mysqli)){
 			if (!tiene_publicacion_pendiente($email, $mysqli)){
+				echo $titulo.' '.$descripcion.' '.$fecVencimiento.' '.$categoria.' '.$imagen.' '.$ciudad.' '.$email;
 				if (publicar($titulo, $descripcion, $fecVencimiento, $categoria,$imagen, $ciudad, $email, $mysqli)){
 					actualizar_creditos($email, $mysqli);
-					cargar_categoria($categoria, $email, $mysqli);
+					//cargar_categoria($categoria, $email, $mysqli);
 					echo "Publicacion exitosa";
 					return true;
+				} else {
+					echo "Ocurrio un error";
 				}
 			}
 			else
