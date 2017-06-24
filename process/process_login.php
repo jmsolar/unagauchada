@@ -1,6 +1,7 @@
 <?php
 
 	include_once '../includes/db_connect.php';
+	include_once('../includes/session.php');
 
     function login($email, $password, $mysqli) {
 		if ($stmt = $mysqli->prepare("SELECT idUsuario, email, password FROM Usuario WHERE email = ? LIMIT 1")) {
@@ -24,8 +25,9 @@
 		$email = trim($_POST['email']);
 		$password = trim($_POST['password']);		
 		if (login($email, $password, $mysqli) == true){ // Inicio de sesión exitosa
-			session_start();
-			$_SESSION["email"]=$email;
+			Session::init();
+			Session::set("email", $email);
+			Session::set("conectado", 1);
 			echo "Log in exitoso";
 		}
 		else // Inicio de sesión fallida

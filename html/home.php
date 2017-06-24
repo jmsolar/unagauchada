@@ -1,17 +1,22 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">        
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="cache-control" content="max-age=0" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="expires" content="0" />
+        <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+        <meta http-equiv="pragma" content="no-cache" />
         <title>Inicio - Una gauchada</title>
 
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/custom.css" rel="stylesheet">
-
     </head>
-    <?php require( "../includes/functions.php" );?>
+    <?php require_once( "../includes/functions.php" );?>
     <body class="home-container">
+        <?php error_reporting(0); ?>
         <!-- Modal -->
         <form id="register-form" method="POST" name="register_form" enctype="multipart/form-data">
             <div class="modal fade" id="registrar" role="dialog" data-backdrop="static">
@@ -41,11 +46,7 @@
                                 <div class="col col-md-6 col-sm-6 align-center">
                                     <div class="form-group">
                                         <label for="foto">Foto de perfil</label>
-                                        <!--<div class="form-group margin-16">
-                                            <img src="../img/logo.png" class="img-fluid size-100" id="foto" name="foto"/>
-                                        </div>
-                                        <button type="button" class="btn btn-warning margin-16 padding-16 padding-sides-16">Elegir foto</button>-->
-                                       <input name="foto" id="foto" type="file">
+                                        <input name="foto" id="foto" type="file">
                                     </div>
                                 </div>                            
                             </div>
@@ -102,7 +103,10 @@
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="login.html">Login</a></li>
+                        <?php 
+                            usuario_logueado();
+                            ver_opcion_usuario(); 
+                        ?>
                     </ul>
                 </div>
             </div>
@@ -122,6 +126,21 @@
                             <button type="button" class="btn btn-md btn-success" data-toggle="modal" data-target="#registrar">Registrar ahora</button>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <h3>Herramientas de búsqueda</h3>
+                            <form id="busqueda-form" method="GET" name="buscar_form" action="../html/busqueda.php">
+                                <div class="row">
+                                    <div class="col col-md-5">
+                                        <input type="text" class="form-control" id="buscar" name="busqueda" placeholder="Buscar..">
+                                    </div>
+                                    <div class="col col-md-7">
+                                        <input type="submit" class="btn btn-success margin-sides-16" id="botonBuscar" value="Buscar">
+                                    </div>
+                                </div>                                
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -130,5 +149,6 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/registrar.js"></script>
     <script src="../js/detallar.js"></script>
+    <script src="../js/cerrarSesion.js"></script>
     </body>
 </html>

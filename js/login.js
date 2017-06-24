@@ -38,7 +38,7 @@ $('document').ready(function(){
 			success: function(response) {
 				if(response=="Log in exitoso"){
 					$("#error-login").fadeIn(1000, function(){						
-						setTimeout(' window.location.href = "../html/micuenta.html"; ',0);
+						setTimeout(' window.location.href = "../html/micuenta.php"; ',0);
 						return true;
 					});
 				}

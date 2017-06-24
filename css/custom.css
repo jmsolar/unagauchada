@@ -60,6 +60,37 @@ body {
 	text-align: center;
 }
 
+.align-right{
+	text-align: right;
+}
+
 .font-size-14{
 	font-size: 14px
+}
+
+.margin-sides-16{
+	margin-left: 16px!important;
+	margin-right: 16px!important;
+}
+
+.no-link{
+	text-decoration: none;
+}
+
+.no-link:hover{
+	color: #9d9d9d!important;
+}
+
+.link:hover{
+	color: #fff!important;
+	background-color: transparent!important;
+	cursor: pointer!important;
+}
+
+.float-left{
+	float: left;
+}
+
+.float-right{
+	float: right;
 }
