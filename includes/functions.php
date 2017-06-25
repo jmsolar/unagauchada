@@ -60,8 +60,8 @@
 				            $apellido=$row["apellido"];
 				            $ciudad=$row["ciudad"];
 				            echo '
-				                    <form action="detalle.php" method="POST">
-				                    	<button type="button" class="btn btn-default" onclick="return enviar_datos('.$idGauchada.' , '.$row["idGauchada"].');">Ver gauchada</button>
+				                    <form action="detalle.php?id='.$row['idGauchada'].'" method="POST">
+				                    	<button type="submit" class="btn btn-default">Ver gauchada</button>
 				                    </form>
 				                </div>';
 				        }

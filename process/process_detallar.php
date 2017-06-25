@@ -2,35 +2,28 @@
 
 	include_once '../includes/db_connect.php';
 	
-	function detalle_gauchada(){
-		$tit=$_SESSION["titulo"];
-		$desc=$_SESSION["descripcion"];
-		$fVenc=$_SESSION["fVencimiento"];
-		$nom=$_SESSION["nombre"];
-		$ape=$_SESSION["apellido"];
-		$nombreCompleto=$nom + " " + $ape;
-		$ciu=$_SESSION["ciudad"];
-		$post=$_SESSION["postulantes"];
+	$detalleId = $_GET['id'];
 
-		echo '
-        <div class="list-group ">
-            <h4 class="list-group-item-heading padding-16">'.$tit.'</h4>
-				<p class="list-group-item-text">
-					<div class="row">
-						<div class="col col-md-10">
-							<div class="row">'.$desc.'</div>
-							<div class="row">Fecha de vencimiento: '.$fVenc.'</div>
-							<div class="row"><div role="presentation">Postulantes <span class="badge">'.$post.'</span></div> </div>
-							<div class="row">'.$nombreCompleto.'</div>
-							<div class="row">'.$ciu.'</div>
-						</div>
-						<div class="col col-md-2">
-							<img src="../img/logo.png" class="img-fluid"/>
-						</div>
-					</div>
-				</p>
-				<form action="../html/home.php">
-    				<input type="submit" class="btn btn-warning" value="Volver al listado"/>
-				</form>
-		</div>';
+	if (empty($detalleId)) {
+		die('Pagina incorrecta');
 	}
+
+	$detalleId = $mysqli->real_escape_string($detalleId);
+
+	$stmt=$mysqli->prepare("SELECT * FROM gauchada INNER JOIN usuario USING (idUsuario)  WHERE idGauchada = '".$detalleId ."'");
+	$stmt->execute();
+	$gauchadasRes = $stmt->get_result();
+	$gauchadasRes = $gauchadasRes->fetch_object();
+
+	$nombreCompleto=$gauchadasRes->nombre . " " . $gauchadasRes->apellido;
+
+	$image = empty($gauchadasRes->imagen) ? 'logo.png' : $gauchadasRes->imagen;
+
+	$query = "SELECT p.*, u.*, count(*) as nroPostulantes FROM postulante p 
+	INNER JOIN gauchada g INNER JOIN usuario u
+	ON p.idGauchada = g.idGauchada AND u.idUsuario = p.idUsuario
+	WHERE g.idGauchada = '".$detalleId ."'";
+
+	$postulantesRes = mysqli_fetch_all($mysqli->query($query), MYSQLI_ASSOC);
+
+	$nroPostulantes = sizeof($postulantesRes > 0) ? $postulantesRes[0]['nroPostulantes'] : 0;
