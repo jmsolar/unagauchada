@@ -95,8 +95,10 @@
 		    	<div class="panel-heading">Titulo</div>
 		    	<div class="panel-body">Fecha de vencimiento: 03/09/17
 		    	<div>Postulantes <span class="badge">7</span></div></div>
-		    	<div class="panel-body"><button type="button" class="btn btn-danger">Editar</button>
-		    	<button type="button" class="btn btn-default" id="misPostulantes" data-dismiss="modal" onclick="verPostulantes()">Ver postulantes</button></div>
+		    	<div class="panel-body">
+		    		<button type="button" class="btn btn-danger">Editar</button>
+		    		<button type="button" class="btn btn-default" id="misPostulantes" data-dismiss="modal" onclick="verPostulantes()">Ver postulantes</button>
+		    	</div>
 		    </div>
   		</div>';
 	}
@@ -143,7 +145,7 @@
 		if (!hay_resultados($mysqli, $valor))
 			echo '<div class="well">No se encontraron resultados para la búsqueda realizada de:  <b>'.$valor.'</b></div>';
 		else{
-			if ($stmt=$mysqli->prepare("SELECT g.idCategoria, g.titulo, g.descripcion, g.fechaVencimiento, g.imagen, g.ciudad, g.idGauchada, g.idUsuario, g.imagen FROM Gauchada g INNER JOIN Categoria c ON (c.idCategoria = g.idCategoria) WHERE (g.titulo LIKE ?) OR (g.ciudad LIKE ?) OR (c.titulo LIKE ?)")){
+			if ($stmt=$mysqli->prepare("SELECT g.idCategoria, g.titulo, g.descripcion, g.fechaVencimiento, g.imagen, g.ciudad, g.idGauchada, g.idUsuario, g.imagen FROM Gauchada g INNER JOIN Categoria c ON (c.idCategoria = g.idCategoria) WHERE ((g.titulo LIKE ?) OR (g.ciudad LIKE ?) OR (c.titulo LIKE ?)) AND (g.fechaVencimiento >= CURDATE())")){
 				$stmt->bind_param('sss', $valor, $valor, $valor);
 				$stmt->execute();    // Ejecuta la consulta preparada.
 				$res = $stmt->get_result();
@@ -154,11 +156,11 @@
 				foreach($rows as $row){
 					$idGauchada=$row["idGauchada"];
 					$idUsuario=$row["idUsuario"];						
-					if ($stmt=$mysqli->prepare("SELECT COUNT(g.idGauchada) as postulantes, u.nombre, u.apellido FROM Postulante p INNER JOIN Gauchada g ON p.idGauchada=g.idGauchada INNER JOIN Usuario u  ON u.idUsuario=g.idUsuario WHERE (p.idGauchada = ?) GROUP BY g.idGauchada")){
+					if ($stmt=$mysqli->prepare("SELECT COUNT(g.idGauchada) as postulantes, u.nombre, u.apellido, g.fechaCreacion FROM Postulante p INNER JOIN Gauchada g ON p.idGauchada=g.idGauchada INNER JOIN Usuario u  ON u.idUsuario=g.idUsuario WHERE (p.idGauchada = ?) GROUP BY g.idGauchada ORDER BY g.fechaCreacion")){
 						$stmt->bind_param('i', $idGauchada);
 						$stmt->execute();
 						$stmt->store_result();
-						$stmt->bind_result($postulantes, $nombre, $apellido);
+						$stmt->bind_result($postulantes, $nombre, $apellido, $fechaCreacion);
 						$stmt->fetch();
 						if($row["imagen"]) $imagen = $row["imagen"];
 						else $imagen = "../img/logo.png";
