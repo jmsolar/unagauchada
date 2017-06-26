@@ -202,7 +202,6 @@
 		Session::init();
 		$estado=Session::get("conectado");
 		if ($estado == 1){
-			Session::destroy();
 			echo '<li><a class="link" onclick="cerrar_sesion()">Cerrar sesión</a></li>';
 		}
 		else

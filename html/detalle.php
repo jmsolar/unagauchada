@@ -1,3 +1,5 @@
+<?php include_once('../includes/session.php');
+Session::init(); ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -59,30 +61,107 @@
 
                             <hr>
 
-                            <div>
+                            <div class="row">
                                 <h4>Comentarios</h4>
+                                <?php if(sizeof($comentariosRes)): ?>
                                 <table class="table table-hover">
                                     <thead>
-                                        <th width="80%">Comenario</th>
-                                        <th width="20%">Autor</th>
+                                        <th width="50%">Comenario</th>
+                                        <th width="10%">Fecha</th>
+                                        <th width="10%">Autor</th>
+                                        <th width="30%">Respuesta</th>
                                     </thead>
                                     <tbody>
-                                        <?php foreach($postulantesRes as $postulante): ?>
+                                        <?php foreach($comentariosRes as $comentario): ?>
                                         <tr>
-                                            <td><?=$postulante['comentario']?></td>
-                                            <td><?=$postulante['nombre']?> <?=$postulante['apellido']?></td>
+                                            <td><?=$comentario['textoComentario']?></td>
+                                            <td><?=$comentario['fechaComentario']?></td>
+                                            <td><?=$comentario['nombre']?> <?=$comentario['apellido']?></td>
+                                            <td><?php if($comentario['textoRespuesta']): ?>
+                                                <?=$comentario['textoRespuesta']?>
+                                            <?php elseif ($gauchadasRes->email === Session::get('email')): ?>
+                                                <button class="btn btn-small btn-info">Responder</button>
+                                            <?php endif; ?>
+                                            </td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
+                            <?php else: ?>
+                                <div>No hay comentarios para esta publicacion</div>
+                                <br/>
+                            <?php endif; ?>
                             </div>
-                            <form action="home.php">
-                                <input type="submit" class="btn btn-warning" value="Volver al listado"/>
-                            </form>
+
+
+                            <div>
+                                <?php if(Session::get('conectado') == 1 && $gauchadasRes->email !== Session::get('email')): ?>
+                                    <a class="btn btn-info" data-toggle="modal" data-target="#commentModal">Dejar un comentario</a>
+
+                                    <a href="home.php" class="btn btn-success">Postularme</a>
+                                <?php endif; ?>
+
+                                <a href="home.php" class="btn btn-warning">Volver al listado</a>                            
+                            </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
+    <!-- comment modal -->
+    
+    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Dejar un comentario</h4>
+          </div>
+          <form>
+              <div class="modal-body">
+                 <div class="form-group">
+                    <label for="Comentario">Comentario</label>
+                    <textarea class="form-control" id="Comentario" rows="3"></textarea>
+                    <input type="hidden" id="idGauchada" value="<?=$_GET['id']?>"></textarea>
+                    <div id="errorMsg" style="display:none">El comentario no puede ser vacio</div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="submitComment()" class="btn btn-primary">Guardar</button>
+              </div>
+          </form>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+
+            function submitComment() {
+                $('#errorMsg').hide();
+                if (!$('#Comentario').val()) {
+                    $('#errorMsg').show();
+                    return;
+                };
+
+                $.ajax({
+                    type: "POST",
+                    data: {comment: $('#Comentario').val(), gauchada: $('#idGauchada').val()},
+                    url: "../process/process_comentar.php",
+                    success: function(data){
+                        location.reload();
+                    },
+                    error: function(data) {
+                        $('#errorMsg').html(data.responseText).show();
+                    }
+                });
+            }
+
+      </script>
+    </div>
+
+
     <script src="../js/jquery-3.2.1.min.js"></script>    
     <script src="../js/jquery.validate.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
