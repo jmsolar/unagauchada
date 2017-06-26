@@ -17,7 +17,7 @@ Session::init(); ?>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/detallar.js"></script>
     </head>
-    <body class="home-container">
+    <body>
         <nav class="navbar navbar-inverse no-border-radius">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -39,7 +39,7 @@ Session::init(); ?>
 
         <div class="container">
             <div class="row">
-                <div class="col col-md-8 offset-md-2">
+                <div class="col col-md-12">
                     <?php 
                         require( "../process/process_detallar.php" );
                     ?>
@@ -65,16 +65,26 @@ Session::init(); ?>
                             </p>
 
                             <hr>
+                            <div class="row">
+                                <?php if(Session::get('conectado') == 1 && $gauchadasRes->email !== Session::get('email')): ?>
+                                    <a class="btn btn-info" data-toggle="modal" data-target="#commentModal">Dejar un comentario</a>
 
+                                    <a data-toggle="modal" data-target="#postularModal" class="btn btn-success">Postularme</a>
+                                <?php endif; ?>
+
+                                <a href="home.php" class="btn btn-warning">Volver al listado</a>                            
+                            </div>
+                            <hr>
                             <div class="row">
                                 <h4>Comentarios</h4>
                                 <?php if(sizeof($comentariosRes)): ?>
                                 <table class="table table-hover">
                                     <thead>
-                                        <th width="50%">Comentario</th>
+                                        <th width="30%">Comentario</th>
                                         <th width="10%">Fecha</th>
-                                        <th width="10%">Autor</th>
+                                        <th width="20%">Autor</th>
                                         <th width="30%">Respuesta</th>
+                                        <th width="10%">Fecha Respuesta</th>
                                     </thead>
                                     <tbody>
                                         <?php foreach($comentariosRes as $comentario): ?>
@@ -88,6 +98,10 @@ Session::init(); ?>
                                                 <button class="btn btn-small btn-info" data-toggle="modal" data-target="#answerModal" data-comment-id="<?=$comentario['idComentario']?>">Responder</button>
                                             <?php endif; ?>
                                             </td>
+                                            <td><?php if($comentario['textoRespuesta']): ?>
+                                                <?=$comentario['fechaRespuesta']?>
+                                            <?php endif; ?>
+                                            </td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -96,17 +110,6 @@ Session::init(); ?>
                                 <div>No hay comentarios para esta publicacion</div>
                                 <br/>
                             <?php endif; ?>
-                            </div>
-
-
-                            <div>
-                                <?php if(Session::get('conectado') == 1 && $gauchadasRes->email !== Session::get('email')): ?>
-                                    <a class="btn btn-info" data-toggle="modal" data-target="#commentModal">Dejar un comentario</a>
-
-                                    <a href="home.php" class="btn btn-success">Postularme</a>
-                                <?php endif; ?>
-
-                                <a href="home.php" class="btn btn-warning">Volver al listado</a>                            
                             </div>
                     </div>
                 </div>
@@ -163,12 +166,10 @@ Session::init(); ?>
                 });
             }
 
-
-
       </script>
     </div>
 
-        <!-- comment modal -->
+        <!-- Answer modal -->
     
     <div class="modal fade" id="answerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
@@ -182,7 +183,6 @@ Session::init(); ?>
                  <div class="form-group">
                     <label for="Comentario">Respuesta</label>
                     <textarea class="form-control" id="Respuesta" rows="3"></textarea>
-                    <input type="hidden" id="idGauchada" value="<?=$_GET['id']?>"/>
                     <div id="errorMsg" style="display:none">El comentario no puede ser vacio</div>
                   </div>
               </div>
@@ -221,16 +221,59 @@ Session::init(); ?>
                 }
             });
         }
-     
+    </script>
+    </div>
 
-            
+ <!-- Postular modal -->
+    
+    <div class="modal fade" id="postularModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Postularme</h4>
+          </div>
+          <form>
+              <div class="modal-body">
+                 <div class="form-group">
+                    <label for="Comentario">Comentario</label>
+                    <textarea class="form-control" id="Application" rows="3"></textarea>
+                    <input type="hidden" id="idGauchada" value="<?=$_GET['id']?>"></textarea>
+                    <div id="errorMsg" style="display:none">El comentario no puede ser vacio</div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="submitApplication()" class="btn btn-primary">Postular!</button>
+              </div>
+          </form>
+        </div>
+      </div>
 
-            
+      <script type="text/javascript">
+
+            function submitApplication() {
+                $('#errorMsg').hide();
+                if (!$('#Application').val()) {
+                    $('#errorMsg').show();
+                    return;
+                };
+
+                $.ajax({
+                    type: "POST",
+                    data: {comment: $('#Application').val(), gauchada: $('#idGauchada').val()},
+                    url: "../process/process_postular.php",
+                    success: function(data){
+                        location.reload();
+                    },
+                    error: function(data) {
+                        $('#errorMsg').html(data.responseText).show();
+                    }
+                });
+            }
 
       </script>
     </div>
-
-
     
     </body>
 </html>

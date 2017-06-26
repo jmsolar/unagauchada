@@ -11,7 +11,7 @@ if (!$textoRespuesta || !$comentario) {
 	echo "No se pudo agregar la respuesta";
 }
 
-else if ($stmt=$mysqli->prepare("UPDATE comentario SET textoRespuesta = '".$textoRespuesta."' WHERE idComentario = $comentario")) {
+else if ($stmt=$mysqli->prepare("UPDATE comentario SET textoRespuesta = '".$textoRespuesta."', fechaRespuesta = NOW() WHERE idComentario = $comentario")) {
 	$stmt->execute();    // Ejecuta la consulta preparada.
 	$stmt->store_result();
 	$stmt->close();
