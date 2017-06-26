@@ -11,6 +11,11 @@ Session::init(); ?>
 
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/custom.css" rel="stylesheet">
+
+        <script src="../js/jquery-3.2.1.min.js"></script>    
+    <script src="../js/jquery.validate.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/detallar.js"></script>
     </head>
     <body class="home-container">
         <nav class="navbar navbar-inverse no-border-radius">
@@ -66,7 +71,7 @@ Session::init(); ?>
                                 <?php if(sizeof($comentariosRes)): ?>
                                 <table class="table table-hover">
                                     <thead>
-                                        <th width="50%">Comenario</th>
+                                        <th width="50%">Comentario</th>
                                         <th width="10%">Fecha</th>
                                         <th width="10%">Autor</th>
                                         <th width="30%">Respuesta</th>
@@ -80,7 +85,7 @@ Session::init(); ?>
                                             <td><?php if($comentario['textoRespuesta']): ?>
                                                 <?=$comentario['textoRespuesta']?>
                                             <?php elseif ($gauchadasRes->email === Session::get('email')): ?>
-                                                <button class="btn btn-small btn-info">Responder</button>
+                                                <button class="btn btn-small btn-info" data-toggle="modal" data-target="#answerModal" data-comment-id="<?=$comentario['idComentario']?>">Responder</button>
                                             <?php endif; ?>
                                             </td>
                                         </tr>
@@ -158,13 +163,74 @@ Session::init(); ?>
                 });
             }
 
+
+
+      </script>
+    </div>
+
+        <!-- comment modal -->
+    
+    <div class="modal fade" id="answerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Responder Comentario</h4>
+          </div>
+          <form>
+              <div class="modal-body">
+                 <div class="form-group">
+                    <label for="Comentario">Respuesta</label>
+                    <textarea class="form-control" id="Respuesta" rows="3"></textarea>
+                    <input type="hidden" id="idGauchada" value="<?=$_GET['id']?>"/>
+                    <div id="errorMsg" style="display:none">El comentario no puede ser vacio</div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="submitAnswer()" class="btn btn-primary">Guardar</button>
+              </div>
+          </form>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        var commentId = -1;
+        
+        $('#answerModal').on('show.bs.modal', function(e) {
+            //get data-id attribute of the clicked element
+            commentId = $(e.relatedTarget).data('comment-id');
+        });
+
+        function submitAnswer() {
+            $('#errorMsg').hide();
+            if (!$('#Respuesta').val()) {
+                $('#errorMsg').show();
+                return;
+            };
+
+            $.ajax({
+                type: "POST",
+                data: {respuesta: $('#Respuesta').val(), comentario: commentId},
+                url: "../process/process_responder.php",
+                success: function(data){
+                    location.reload();
+                },
+                error: function(data) {
+                    $('#errorMsg').html(data.responseText).show();
+                }
+            });
+        }
+     
+
+            
+
+            
+
       </script>
     </div>
 
 
-    <script src="../js/jquery-3.2.1.min.js"></script>    
-    <script src="../js/jquery.validate.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/detallar.js"></script>
+    
     </body>
 </html>
