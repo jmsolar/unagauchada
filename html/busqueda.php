@@ -32,37 +32,28 @@
             </div>
         </nav>
 
-        <div class="container">
+        <div class="container margin-bottom-16">
             <div class="row">
 				<div class="col col-md-12">
-					<h4><b>Filtrar por</b></h4>
-					<form id="filtrar-form" class="row" name="filtar_form">
-						<div class="float-left">
-							<label class="checkbox-inline"><input type="checkbox" id="opcion1" name="checkbox" value="categoria">Categoría</label>
-							<label class="checkbox-inline"><input type="checkbox" id="opcion2" name="checkbox" value="ciudad">Ciudad</label>
-						</div>
-						<div class="float-right">
-							<button type="submit" class="btn btn-primary" id="botonFiltrar">Filtrar</button>
-						</div>
-						<div id="error-filtrar"></div>
-					</form>
-					<hr>
 					<div class="row">
-						<?php verResultados($_GET["busqueda"]); ?>
+						<?php //busqueda, categoria, ciudad
+                            if (!isset($_GET["filtrarCategoria"]) AND !isset($_GET["filtrarCiudad"]))
+                                verResultados($_GET["busqueda"],0,0);//Sin filtros
+                            else{
+                                if (isset($_GET["filtrarCategoria"]) AND !isset($_GET["filtrarCiudad"]))
+                                    verResultados($_GET["busqueda"],$_GET["filtrarCategoria"],0);//Con filtro categoria
+                                else{
+                                    if (!isset($_GET["filtrarCategoria"]) AND isset($_GET["filtrarCiudad"]))
+                                        verResultados($_GET["busqueda"],0,$_GET["filtrarCiudad"]);//Con filtro ciudad
+                                    else
+                                        verResultados($_GET["busqueda"],$_GET["filtrarCategoria"],$_GET["filtrarCiudad"]);//Ambos filtros
+                                }
+                            }
+                        ?>
             		</div>
             		<hr>
             		<form action="home.php">
     					<input type="submit" class="btn btn-warning float-right" value="Volver al inicio">
-					</form>
-					<form id="busqueda-form" class="float-left" method="GET" name="buscar_form" action="../html/busqueda.php">
-                        <div class="row">
-                            <div class="col col-md-9">
-                                <input type="text" class="form-control" id="buscar" name="busqueda" placeholder="Buscar..">
-                            </div>
-                        	<div class="col col-md-3">
-                            	<input type="submit" class="btn btn-success margin-sides-16" id="botonBuscar" value="Buscar">
-                        	</div>
-                        </div> 
 					</form>
             	</div>
             </div>

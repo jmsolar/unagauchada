@@ -135,9 +135,54 @@
                                         <input type="text" class="form-control" id="buscar" name="busqueda" placeholder="Buscar..">
                                     </div>
                                     <div class="col col-md-7">
-                                        <input type="submit" class="btn btn-success margin-sides-16" id="botonBuscar" value="Buscar">
+                                        <input type="submit" class="btn btn-success" id="botonBuscar" value="Buscar">
                                     </div>
-                                </div>                                
+                                </div>
+                                <div class="row margin-top-20">
+                                    <div class="col col-md-12">
+                                        <h4>Filtros</h4>
+                                        <div class="row">
+                                            <div class="col col-md-12">
+                                                <div class="row">
+                                                    <div class="col col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="cate">Categoría:</label>
+                                                            <div class="row">
+                                                                <div class="col col-md-5">
+                                                                    <?php mostrar_categorias(); ?>
+                                                                </div>
+                                                                <div class="col col-md-7">
+                                                                    <input type="checkbox" id="cate" name="checkboxCategoria" value="categoria"/>
+                                                                    <p class="text-danger">* habilita el check para filtrar por categoría</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row margin-top-20">
+                                            <div class="col col-md-12">
+                                                <div class="row">
+                                                    <div class="col col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="ciu">Ciudad:</label>
+                                                            <div class="row">
+                                                                <div class="col col-md-5">
+                                                                    <?php mostrar_ciudades(); ?>
+                                                                </div>
+                                                                <div class="col col-md-7">
+                                                                    <input type="checkbox" id="ciud" name="checkboxCiudad" value="ciudad"/>
+                                                                    <p class="text-danger">* habilita el check para filtrar por ciudad</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -150,5 +195,6 @@
     <script src="../js/registrar.js"></script>
     <script src="../js/detallar.js"></script>
     <script src="../js/cerrarSesion.js"></script>
+    <script src="../js/filtrar.js"></script>
     </body>
 </html>
