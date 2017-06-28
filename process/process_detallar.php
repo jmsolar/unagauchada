@@ -23,7 +23,7 @@
 	//postulantes
 	$query = "SELECT p.*, u.*, count(*) as nroPostulantes FROM postulante p 
 	INNER JOIN gauchada g INNER JOIN usuario u
-	ON p.idGauchada = g.idGauchada AND u.idUsuario = p.idUsuario
+	ON p.idGauchada = g.idGauchada AND u.idUsuario = p.idPostulante
 	WHERE g.idGauchada = '".$detalleId ."'";
 
 	$postulantesRes = mysqli_fetch_all($mysqli->query($query), MYSQLI_ASSOC);
@@ -34,7 +34,7 @@
 
 	$query = "SELECT c.*, u.* FROM comentario c 
 	INNER JOIN gauchada g INNER JOIN usuario u
-	ON c.idGauchada = g.idGauchada AND u.idUsuario = c.idUsuario
+	ON c.idGauchada = g.idGauchada AND u.idUsuario = c.idUsuarioComentario
 	WHERE g.idGauchada = '".$detalleId ."'";
 
 	$comentariosRes = mysqli_fetch_all($mysqli->query($query), MYSQLI_ASSOC);

@@ -15,7 +15,6 @@ function validar_tarjeta(e){
         return true;        
     patron =/[0-9]/;// Patron de entrada, en este caso solo acepta numeros
     tecla_final = String.fromCharCode(tecla);
-    console.log('tarjeta valida? ', patron.test(tecla_final));
     return patron.test(tecla_final);
 }
 
@@ -50,9 +49,8 @@ $('document').ready(function(){
 			success: function(response) {
 				if(response=="Compra exitosa"){
 					$("#error-comprar").fadeIn(1000, function(){
-						console.log("entre");
 						$("#error-comprar").html('<div class="alert alert-success"><strong>¡Exito! </strong><span>La compra de crédito(s) fue realizada correctamente</span></div>');
-						setTimeout(' window.location.href = "../html/micuenta.html"; ',4000);
+						setTimeout(' window.location.href = "../html/micuenta.php"; ',4000);
 					});
 				}
 				else{

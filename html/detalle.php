@@ -1,5 +1,4 @@
-<?php include_once('../includes/session.php');
-Session::init(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -17,6 +16,8 @@ Session::init(); ?>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/detallar.js"></script>
     </head>
+    <?php require_once( "../includes/functions.php" );?>
+    <?php Session::init(); ?>
     <body>
         <nav class="navbar navbar-inverse no-border-radius">
             <div class="container-fluid">
@@ -31,7 +32,10 @@ Session::init(); ?>
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <!-- <li><a href="login.html">Login</a></li> -->
+                        <?php 
+                            usuario_logueado();
+                            ver_opcion_usuario(); 
+                        ?>
                     </ul>
                 </div>
             </div>
@@ -47,7 +51,7 @@ Session::init(); ?>
                         <h4 class="list-group-item-heading padding-16"><?=$gauchadasRes->titulo?></h4>
                             <p class="list-group-item-text">
                                 <div class="row">
-                                    <div class="col col-md-10">
+                                    <div class="col col-md-8">
                                         <div class="row"><?=$gauchadasRes->descripcion?></div>
                                         
                                         <div class="row">Fecha de creacion: <?=$gauchadasRes->fechaCreacion?></div>
@@ -70,6 +74,9 @@ Session::init(); ?>
                                     <a class="btn btn-info" data-toggle="modal" data-target="#commentModal">Dejar un comentario</a>
 
                                     <a data-toggle="modal" data-target="#postularModal" class="btn btn-success">Postularme</a>
+                                <?php elseif (Session::get('conectado') == 1 && $gauchadasRes->email !== Session::get('email')):?>
+                                    <a class="btn btn-info"">Editar Gauchada</a>
+                                    <a class="btn btn-success"">Ver Postulantes</a>
                                 <?php endif; ?>
 
                                 <a href="home.php" class="btn btn-warning">Volver al listado</a>                            
@@ -273,6 +280,7 @@ Session::init(); ?>
             }
 
       </script>
+      <script src="../js/cerrarSesion.js"></script>
     </div>
     
     </body>

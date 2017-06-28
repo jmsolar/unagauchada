@@ -24,9 +24,12 @@
                     <a class="navbar-brand" href="home.php">Una gauchada</a>
                 </div>
 
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="login.html">Login</a></li>
+                        <?php 
+                            usuario_logueado();
+                            ver_opcion_usuario(); 
+                        ?>
                     </ul>
                 </div>
             </div>

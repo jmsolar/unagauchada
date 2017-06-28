@@ -56,15 +56,11 @@ $('document').ready(function(){
             processData: false,
             success:function(img_path){
             	submitForm(img_path);
-                console.log("success");
-                console.log(img_path);
             },
             error: function(data){
-                console.log("error");
                 $("#error-register").fadeIn(1000, function(){
 					$("#error-register").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>No se pudo subir la imagen</span></div>');
 				});
-                console.log(data);
             }
         });
 

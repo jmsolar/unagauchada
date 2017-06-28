@@ -28,7 +28,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="home.php">Una gauchada</a>
-                    <a class="navbar-brand font-size-14" href="misdatos.html">Mis datos</a>
+                    <!--<a class="navbar-brand font-size-14" href="misdatos.html">Mis datos</a>-->
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
@@ -50,17 +50,17 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="titulo">Título</label>
-                                <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título" autofocus="autofocus" required>
+                                <input type="text" maxlength="30" class="form-control" id="titulo" name="titulo" placeholder="Título" autofocus="autofocus" required>
                             </div>
                             <div class="form-group">
                                 <label for="descripcion">Descripción</label>
                                 <textarea class="form-control" rows="3" id="descripcion" name="descripcion" required></textarea>
                             </div>
-                            <div class="row">
+                           <div class="row" style="display: none">
                                 <div class="col col-md-3">
                                     <div class="form-group">
                                         <label for="categoria">Categoria</label>
-                                        <input type="text" class="form-control" id="categoria" name="categoria" placeholder="Categoria" required>
+                                        <input type="text" class="form-control" id="categoria" name="categoria" placeholder="Categoria">
                                     </div>
                                 </div>
                             </div>
@@ -68,7 +68,7 @@
                                 <div class="col col-md-6">
                                     <div class="form-group">
                                         <label for="fecVencimiento">Fecha de vencimiento</label>
-                                        <input type="date" class="form-control" id="fecVencimiento" name="fecVencimiento" value="2017-01-04" required>
+                                        <input type="date" class="form-control" id="fecVencimiento" name="fecVencimiento" value="2017-07-04" required>
                                     </div>
                                 </div>
                                 <div class="col col-md-6">

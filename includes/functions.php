@@ -221,9 +221,9 @@
 													<img src="'.$imagen.'" class="size-75 img-fluid" width="100px"/>
 												</div>
 									    	</div>
-									    	<div class="panel-body">
-									    		<button type="button" class="btn btn-danger">Ver gauchada</button>
-									    	</div>
+									    	<form action="detalle.php?id='.$idGauchada.'" method="POST">
+				                    	<button type="submit" class="btn btn-default">Ver gauchada</button>
+				                    </form>
 									    </div>
 							  		</div>
 							  	</div>';
@@ -321,7 +321,8 @@
 	function usuario_logueado(){
 		Session::init();
 		$email=Session::get("email");
-		echo '<li><a class="no-link"><b>'.$email.'</b></a></li>';
+
+		echo '<li><a class="no-link" href="miCuenta.php">Mi Cuenta</a></li><li><a class="no-link"><b>'.$email.'</b></a></li>';
 	}
 
 	function ver_opcion_usuario(){

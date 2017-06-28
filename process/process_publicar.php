@@ -143,12 +143,11 @@
 
 		if (tiene_credito($email, $mysqli)){
 			if (!tiene_publicacion_pendiente($email, $mysqli)){
-				echo $titulo.' '.$descripcion.' '.$fecVencimiento.' '.$categoria.' '.$imagen.' '.$ciudad.' '.$email;
 				if (publicar($titulo, $descripcion, $fecVencimiento, $categoria,$imagen, $ciudad, $email, $mysqli)){
 					actualizar_creditos($email, $mysqli);
 					//cargar_categoria($categoria, $email, $mysqli);
 					echo "Publicacion exitosa";
-					return true;
+					exit();
 				} else {
 					echo "Ocurrio un error";
 				}

@@ -12,7 +12,7 @@ if (!$comment || !$gauchada || $usuario === -1) {
 	echo "No se pudo agregar el comentario";
 }
 
-else if ($stmt=$mysqli->prepare("INSERT INTO postulante(`idGauchada`, `idUsuario`, `comentario`) VALUES($gauchada, $usuario, '".$comment."')")) {
+else if ($stmt=$mysqli->prepare("INSERT INTO postulante(`idGauchada`, `idPostulante`, `comentario`) VALUES($gauchada, $usuario, '".$comment."')")) {
 	$stmt->execute();    // Ejecuta la consulta preparada.
 	$stmt->store_result();
 	$stmt->close();

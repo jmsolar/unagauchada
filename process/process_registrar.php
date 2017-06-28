@@ -4,7 +4,7 @@
 	include_once('../includes/session.php');
 
 	function existeEmail($email, $mysqli) {
-		if ($stmt = $mysqli->prepare("SELECT COUNT(idUsuario) FROM Usuario WHERE email = $email LIMIT 1")) {
+		if ($stmt = $mysqli->prepare("SELECT COUNT(idUsuario) FROM Usuario WHERE email = '".$email."' LIMIT 1")) {
 			$stmt=$stmt->execute();    // Ejecuta la consulta preparada.
 			if ($stmt == 1)
 				return true; //El email ya existe

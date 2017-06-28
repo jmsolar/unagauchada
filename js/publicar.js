@@ -21,15 +21,12 @@ $('document').ready(function(){
             processData: false,
             success:function(img_path){
             	submitForm(img_path);
-                console.log("success");
-                console.log(img_path);
+                location.reload();
             },
             error: function(data){
-                console.log("error");
                 $("#error-register").fadeIn(1000, function(){
 					$("#error-register").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>No se pudo subir la imagen</span></div>');
 				});
-                console.log(data);
             }
         });
 
@@ -51,8 +48,9 @@ $('document').ready(function(){
 				if(response=="Publicacion exitosa"){
 					$("#error-publicar").fadeIn(1000, function(){
 						$("#error-publicar").html('<div class="alert alert-success"><strong>¡Exito! </strong><span>La publicación fue creada, espere unos minutos para poder verla en la lista de sus publicaciones activas</span></div>');
-						setTimeout(' window.location.href = "../html/micuenta.html"; ',5000);
+						
 					});
+					location.reload();
 				}
 				else{
 					if(response=="No tiene credito"){
