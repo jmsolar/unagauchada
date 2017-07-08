@@ -241,17 +241,19 @@
         <div class="container">
             <div class="row">
                 <div class="col col-md-12">
-                    <button type="button" class="btn btn-md btn-success" data-toggle="modal" data-target="#publicar" onclick="verificar_creditos()">Publicar</button>
+                    <button type="submit" class="btn btn-md btn-success" onclick="verificar_creditos()">Publicar</button>
                     <button type="button" class="btn btn-md btn-warning" data-toggle="modal" data-target="#comprarCredito">Comprar crédito</button>
                     <button type="button" class="btn btn-md btn-default" data-toggle="modal" data-target="#verGauchadasPedidas">Ver gauchadas pedidas</button>
                     <button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#verGauchadasCerradas">Ver gauchadas cerradas</button>
+                </div>
+                <div class="col col-md-12">
+                    <div class="margin-top-20" id="info-comprar"></div>
                 </div>
             </div>    
         </div>
 
     <script src="../js/jquery-3.2.1.min.js"></script>    
     <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/publicar.js"></script>
     <script src="../js/comprar.js"></script>
     <script src="../js/verGauchadasPedidas.js"></script>
     <script src="../js/verPostulantes.js"></script>

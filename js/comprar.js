@@ -6,7 +6,6 @@ function validar_credito(e){
 	var credito = comprar_form.credito.value;
 	if (credito <= 0){
     	$("#error-format-comprar").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>El valor ingresado en cantidad de creditos no es válido</span></div>');
-    	//$('#btn-comprar').attr('disabled', true);
     	return false;
 	}
 	else
@@ -27,7 +26,6 @@ function validar_longitud(comprar_form){
 	var longitud = tarjeta.length;	
     if (longitud < 16){
     	$("#error-format-comprar").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>La longitud de la tarjeta de crédito deben ser 16 carácteres</span></div>');
-    	//$('#btn-comprar').attr('disabled', true);
     	return false;
     }
     else
@@ -35,19 +33,28 @@ function validar_longitud(comprar_form){
 }
 
 function verificar_creditos(){
-	$.ajax({		
-		type : 'POST',
-		url  : '../process/process_creditos.php',
-		data : {},
-		sucess: function(response){
-
-		}
-	});
-	return false;
+    $.ajax({
+        type:'POST',
+        url: '../process/process_creditos.php',
+        data: {},
+        success: function(response){
+        	if (response == "No tiene creditos"){
+        		$("#info-comprar").fadeIn(1000, function(){	
+        			$("#info-comprar").html('<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">×</a><strong>¡Error! </strong><span>No dispone de créditos para poder publicar</span></div>');
+        		});
+        		return false;
+        	}
+        	else{
+        		$("#info-comprar").html("");
+        		$("#publicar").modal("show");
+        		return false;
+        	}
+    	}
+     });
 }
 
 $('document').ready(function(){
-	$('#publicar').modal('hide');
+	$("#publicar").modal("hide"); 
 
     $("#comprar-form").validate({
 		submitHandler: submitForm 
