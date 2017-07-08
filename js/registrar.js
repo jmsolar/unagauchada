@@ -1,6 +1,5 @@
 function limpiar_campos(){
 	$('#register-form').trigger("reset");
-	$('#btn-registrar').attr('disabled', true);
 }
 
 function borrar_email(){

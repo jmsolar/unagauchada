@@ -40,7 +40,7 @@
         </nav>
 
         <form id="publicar-form" method="POST" name="publicar_form" enctype="multipart/form-data">
-            <div class="modal fade" id="publicar" role="dialog" data-backdrop="static">
+            <div class="modal fade" id="publicar" role="dialog" data-backdrop="static" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -56,7 +56,7 @@
                                 <label for="descripcion">Descripción</label>
                                 <textarea class="form-control" rows="3" id="descripcion" name="descripcion" required></textarea>
                             </div>
-                           <div class="row" style="display: none">
+                           <div class="row">
                                 <div class="col col-md-3">
                                     <div class="form-group">
                                         <label for="categoria">Categoria</label>
@@ -108,8 +108,15 @@
                                         <label for="tarjeta">Tarjeta de crédito</label>
                                         <input type="text" class="form-control" id="tarjeta" name="tarjeta" placeholder="N° de la tarjeta de crédito" autofocus="autofocus" onkeypress="return validar_tarjeta(event)" required>
                                     </div>
-                                    <div id="error-format-comprar"></div>
                                 </div>
+                                <div class="col col-md-6">
+                                    <div class="form-group">
+                                        <label for="codigo">Código de seguridad</label>
+                                        <input type="text" class="form-control" id="codigo" name="codigo" placeholder="Código de seguridad" autofocus="autofocus" onkeypress="return validar_tarjeta(event)" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col col-md-4">
                                     <div class="form-group">
                                         <label for="credito">Cantidad de créditos</label>
@@ -117,11 +124,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <div id="error-format-comprar"></div>
                             <div id="error-comprar"></div>
                         </div>                   
                         <div class="modal-footer">
-                            <button type="button" id="btn-cancelar" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" id="btn-comprar" class="btn btn-warning">Aceptar</button>
+                            <button type="button" id="btn-cancelar-compra" class="btn btn-secondary" data-dismiss="modal" onclick="limpiar_campos()">Cancelar</button>
+                            <button type="submit" id="btn-comprar" class="btn btn-warning">Comprar</button>
                         </div>                
                     </div>
                 </div>
@@ -233,7 +241,7 @@
         <div class="container">
             <div class="row">
                 <div class="col col-md-12">
-                    <button type="button" class="btn btn-md btn-success" data-toggle="modal" data-target="#publicar">Publicar</button>
+                    <button type="button" class="btn btn-md btn-success" data-toggle="modal" data-target="#publicar" onclick="verificar_creditos()">Publicar</button>
                     <button type="button" class="btn btn-md btn-warning" data-toggle="modal" data-target="#comprarCredito">Comprar crédito</button>
                     <button type="button" class="btn btn-md btn-default" data-toggle="modal" data-target="#verGauchadasPedidas">Ver gauchadas pedidas</button>
                     <button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#verGauchadasCerradas">Ver gauchadas cerradas</button>

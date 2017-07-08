@@ -1,8 +1,12 @@
+function limpiar_campos(){
+	$('#comprar-form').trigger("reset");
+}
+
 function validar_credito(e){
 	var credito = comprar_form.credito.value;
 	if (credito <= 0){
     	$("#error-format-comprar").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>El valor ingresado en cantidad de creditos no es válido</span></div>');
-    	$('#btn-comprar').attr('disabled', true);
+    	//$('#btn-comprar').attr('disabled', true);
     	return false;
 	}
 	else
@@ -23,14 +27,28 @@ function validar_longitud(comprar_form){
 	var longitud = tarjeta.length;	
     if (longitud < 16){
     	$("#error-format-comprar").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>La longitud de la tarjeta de crédito deben ser 16 carácteres</span></div>');
-    	$('#btn-comprar').attr('disabled', true);
+    	//$('#btn-comprar').attr('disabled', true);
     	return false;
     }
     else
     	return true;
 }
 
-$('document').ready(function(){ 
+function verificar_creditos(){
+	$.ajax({		
+		type : 'POST',
+		url  : '../process/process_creditos.php',
+		data : {},
+		sucess: function(response){
+
+		}
+	});
+	return false;
+}
+
+$('document').ready(function(){
+	$('#publicar').modal('hide');
+
     $("#comprar-form").validate({
 		submitHandler: submitForm 
     });
@@ -50,6 +68,8 @@ $('document').ready(function(){
 				if(response=="Compra exitosa"){
 					$("#error-comprar").fadeIn(1000, function(){
 						$("#error-comprar").html('<div class="alert alert-success"><strong>¡Exito! </strong><span>La compra de crédito(s) fue realizada correctamente</span></div>');
+						$('#btn-cancelar-compra').attr('disabled', true);
+						$('#btn-comprar').attr('disabled', true);
 						setTimeout(' window.location.href = "../html/micuenta.php"; ',4000);
 					});
 				}
@@ -60,9 +80,9 @@ $('document').ready(function(){
 						});
 					}
 					else{
-						if(response=="Número de tarjeta no válido"){
+						if(response=="Verifique los datos ingresados"){
 							$("#error-comprar").fadeIn(1000, function(){
-								$("#error-comprar").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>El número de tarjeta ingresado no es válido</span></div>');
+								$("#error-comprar").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>Verifique los datos ingresados</span></div>');
 							});
 						}						
 					}

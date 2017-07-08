@@ -76,9 +76,9 @@
                                         <label for="telefono">Teléfono</label>
                                         <input type="text" class="form-control" id="telefono" name="telefono" placeholder="N° de teléfono" onkeypress="return validar_telefono(event)" required>
                                     </div>
-                                    <div id="error-register"></div>
                                 </div>
                             </div>
+                            <div id="error-register"></div>
                         </div>                   
                         <div class="modal-footer">
                             <button type="button" id="btn-cancelar" class="btn btn-secondary" data-dismiss="modal" onclick="limpiar_campos()">Cancelar</button>
@@ -128,16 +128,13 @@
                             <?php endif; ?>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row margin-top-20" style="background-color: rgba(0,0,0, 0.1)!important; border-radius: 8px">
                         <div class="col col-md-12">
                             <h3>Herramientas de búsqueda</h3>
                             <form id="busqueda-form" method="GET" name="buscar_form" action="../html/busqueda.php">
                                 <div class="row">
                                     <div class="col col-md-5">
-                                        <input type="text" class="form-control" id="buscar" name="busqueda" placeholder="Buscar..">
-                                    </div>
-                                    <div class="col col-md-7">
-                                        <input type="submit" class="btn btn-success" id="botonBuscar" value="Buscar">
+                                        <input type="text" class="form-control" id="buscar" name="busqueda" placeholder="Ingresa un dato para buscar">
                                     </div>
                                 </div>
                                 <div class="row margin-top-20">
@@ -146,44 +143,46 @@
                                         <div class="row">
                                             <div class="col col-md-12">
                                                 <div class="row">
-                                                    <div class="col col-md-12">
-                                                        <div class="form-group">
-                                                            <label for="cate">Categoría:</label>
-                                                            <div class="row">
-                                                                <div class="col col-md-5">
-                                                                    <?php mostrar_categorias(); ?>
-                                                                </div>
-                                                                <div class="col col-md-7">
-                                                                    <input type="checkbox" id="cate" name="checkboxCategoria" value="categoria"/>
-                                                                    <p class="text-danger">* habilita el check para filtrar por categoría</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    <div class="col col-md-5">
+                                                        <?php mostrar_categorias(); ?>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row margin-top-20">
-                                            <div class="col col-md-12">
-                                                <div class="row">
-                                                    <div class="col col-md-12">
-                                                        <div class="form-group">
-                                                            <label for="ciu">Ciudad:</label>
-                                                            <div class="row">
-                                                                <div class="col col-md-5">
-                                                                    <?php mostrar_ciudades(); ?>
-                                                                </div>
-                                                                <div class="col col-md-7">
-                                                                    <input type="checkbox" id="ciud" name="checkboxCiudad" value="ciudad"/>
-                                                                    <p class="text-danger">* habilita el check para filtrar por ciudad</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    <div class="col col-md-5">
+                                                        <?php mostrar_ciudades(); ?>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>                                    
+                                </div>
+                                <div class="row margin-top-20">
+                                    <div class="col col-md-12">
+                                        <h4>Ordenar por</h4>
+                                        <div class="row">
+                                            <div class="col col-md-12">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col col-md-4">
+                                                            <select class="form-control" id="orden" name="orden">
+                                                                <option value="" disabled selected>Selecciona un campo</option>
+                                                                <option>cantidad de postulantes</option>
+                                                                <option>fecha de creacion</option>
+                                                                <option>titulo</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col col-md-4">
+                                                            <select class="form-control" id="tipoOrden" name="tipoOrden">
+                                                                <option>Ascendente</option>
+                                                                <option>Descendente</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col col-md-4 pull-right">
+                                                            <input type="submit" class="btn btn-success" id="botonBuscar" value="Buscar">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
