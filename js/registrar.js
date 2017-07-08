@@ -3,6 +3,10 @@ function limpiar_campos(){
 	$('#btn-registrar').attr('disabled', true);
 }
 
+function borrar_email(){
+	$('#email').val("");	
+}
+
 function validar_email(register_form){
 	var email = register_form.email.value;
 	var atpos = email.indexOf("@");
@@ -35,17 +39,15 @@ function validar_telefono(e){
 
 $('document').ready(function(){ 
     $("#register-form").validate({
-		submitHandler: submitImage 
+		submitHandler: submitImage
     });
-    
 
     function submitImage(image){
-
-    	
     	if(!$('#foto').val()){
     		submitForm();
     		return;
-    	};
+    	}
+    	var data = $("#foto").serialize();
     	var formData = new FormData(image);
         $.ajax({
             type:'POST',
@@ -63,23 +65,19 @@ $('document').ready(function(){
 				});
             }
         });
-
     }
 
 
 
 	function submitForm(img){ 
-
-
-
 		var data = $("#register-form").serialize();
 		data = data+"&image="+img;
-		
 		$.ajax({		
 			type : 'POST',
 			url  : '../process/process_registrar.php',
 			data : data,
 			beforeSend: function() { 
+				$("#error-register").html('');
 				$("#error-register").fadeOut();
 				$("#error-format-email").fadeOut();
 			},
@@ -87,21 +85,25 @@ $('document').ready(function(){
 				if(response=="Usuario registrado exitosamente"){
 					$("#error-register").fadeIn(1000, function(){
 						$("#error-register").html('<div class="alert alert-success"><strong>¡Exito! </strong><span>Para comenzar a utilizar su cuenta inicie sesión</span></div>');										
-						setTimeout(' window.location.href = "../html/home.php"; ',4000);
+						setTimeout(' window.location.href = "../html/home.php"; ',6000);
+						return true;
 					});
 				}
 				else{
 					if(response=="Las contraseñas son distintas"){
 						$("#error-register").fadeIn(1000, function(){					
 							$("#error-register").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>Las contraseñas ingresadas deben coincidir</span></div>');
+							return false;
 						});
 					}
 					else{
 						if(response=="Email existente"){
 							$("#error-register").fadeIn(1000, function(){
-								$("#error-register").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>El email ingresado ya existe, intente con otra cuenta</span></div>');
+								borrar_email();
+								$("#error-register").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>El email ingresado ya existe, intente con otro</span></div>');
+								return false;
 							});
-						}			
+						}
 					}
 				}
 			}
