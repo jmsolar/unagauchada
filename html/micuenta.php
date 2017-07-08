@@ -255,6 +255,7 @@
     <script src="../js/jquery-3.2.1.min.js"></script>    
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/comprar.js"></script>
+    <script src="../js/publicar.js"></script>
     <script src="../js/verGauchadasPedidas.js"></script>
     <script src="../js/verPostulantes.js"></script>
     <script src="../js/jquery.validate.min.js"></script>
