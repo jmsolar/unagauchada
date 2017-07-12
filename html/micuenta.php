@@ -56,11 +56,11 @@
                                 <label for="descripcion">Descripción</label>
                                 <textarea class="form-control" rows="3" id="descripcion" name="descripcion" required></textarea>
                             </div>
+
                            <div class="row">
-                                <div class="col col-md-3">
+                                <div class="col col-md-12">
                                     <div class="form-group">
-                                        <label for="categoria">Categoria</label>
-                                        <input type="text" class="form-control" id="categoria" name="categoria" placeholder="Categoria">
+                                        <?php mostrar_categorias_cuenta(); ?>
                                     </div>
                                 </div>
                             </div>
@@ -85,8 +85,8 @@
                             <div id="error-publicar"></div>
                         </div>                   
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-warning">Aceptar</button>
+                            <button type="button" class="btn btn-secondary" id="botonCancelarPublicar" data-dismiss="modal" onclick="limpiar_campos_pub()">Cancelar</button>
+                            <button type="submit" class="btn btn-warning" id="botonPublicar">Publicar</button>
                         </div>                
                     </div>
                 </div>
@@ -136,79 +136,6 @@
             </div>
         </form>
 
-        <form id="ver-postulantes-form" method="POST" name="ver_postulantes_form">
-            <div class="modal fade" id="verPostulantes" role="dialog" data-backdrop="static">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" onclick="cerrarPostulantes()">&times;</button>
-                            <h5 class="modal-title" id="titulo">Postulantes</h5>
-                        </div>
-                        <div class="modal-body">
-                            <div>
-                                <div><span>Apellido: </span>Gimenez</div>
-                                <div><span>Nombre: </span>Soledad</div>
-                                <button type="button" class="btn btn-danger">Ver perfil</button>
-                            </div>
-                            <hr>
-                            <div>
-                                <div><span>Apellido: </span>Gimenez</div>
-                                <div><span>Nombre: </span>Soledad</div>
-                                <button type="button" class="btn btn-danger">Ver perfil</button>
-                            </div>
-                            <hr>
-                            <div>
-                                <div><span>Apellido: </span>Gimenez</div>
-                                <div><span>Nombre: </span>Soledad</div>
-                                <button type="button" class="btn btn-danger">Ver perfil</button>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" id="btn-volver" class="btn btn-warning" onclick="cerrarPostulantes()">Volver al listado</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-
-        <form id="ver-gauchadas-pedidas-form" method="POST" name="ver_gauchadas_pedidas_form" enctype="multipart/form-data">
-            <div class="modal fade" id="verGauchadasPedidas" role="dialog" data-backdrop="static">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h5 class="modal-title" id="titulo">Mis gauchadas pedidas</h5>
-                        </div>
-                        <div class="modal-body">
-                            <?php verGauchadasPedidas(); ?>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" id="btn-cancelar" class="btn btn-warning" data-target="verGauchadasPedidas" data-dismiss="modal">Cerrar</button>
-                        </div> 
-                    </div>
-                </div>
-            </div>
-        </form>
-
-        <form id="ver-gauchadas-cerradas-form" method="POST" name="ver_gauchadas_cerradas_form" enctype="multipart/form-data">
-            <div class="modal fade" id="verGauchadasCerradas" role="dialog" data-backdrop="static">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h5 class="modal-title" id="titulo">Mis gauchadas cerradas</h5>
-                        </div>
-                        <div class="modal-body">
-                            <?php verGauchadasCerradas(); ?>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" id="btn-cancelar" class="btn btn-warning" data-target="verGauchadasCerradas" data-dismiss="modal">Cerrar</button>
-                        </div> 
-                    </div>
-                </div>
-            </div>
-        </form> 
-
         <form id="calificar-form" method="POST" name="calificar_form">
              <div class="modal fade" id="calificar" role="dialog" data-backdrop="static">
                 <div class="modal-dialog">
@@ -241,15 +168,12 @@
         <div class="container">
             <div class="row">
                 <div class="col col-md-12">
-                    <button type="submit" class="btn btn-md btn-success" onclick="verificar_creditos()">Publicar</button>
-                    <button type="button" class="btn btn-md btn-warning" data-toggle="modal" data-target="#comprarCredito">Comprar crédito</button>
-                    <button type="button" class="btn btn-md btn-default" data-toggle="modal" data-target="#verGauchadasPedidas">Ver gauchadas pedidas</button>
-                    <button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#verGauchadasCerradas">Ver gauchadas cerradas</button>
+                    <?php mostrarOpcionesUsuario(); ?>
                 </div>
                 <div class="col col-md-12">
                     <div class="margin-top-20" id="info-comprar"></div>
                 </div>
-            </div>    
+            </div>
         </div>
 
     <script src="../js/jquery-3.2.1.min.js"></script>    

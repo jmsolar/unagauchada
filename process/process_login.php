@@ -1,7 +1,7 @@
 <?php
 
-	include_once '../includes/db_connect.php';
-	include_once('../includes/session.php');
+	include('../includes/db_connect.php');
+	include('../includes/session.php');
 
     function login($email, $password, $mysqli) {
 		if ($stmt = $mysqli->prepare("SELECT idUsuario, email, password FROM Usuario WHERE email = ? LIMIT 1")) {
@@ -21,6 +21,21 @@
 		return true;
 	}
 
+	function tipoUsuario($email, $mysqli){
+		if ($stmt=$mysqli->prepare("SELECT admin FROM Usuario WHERE email ='$email'")){
+			$stmt->execute();    // Ejecuta la consulta preparada.
+			$stmt->store_result();
+			$stmt->bind_result($admin);
+			$stmt->fetch();
+			if ($admin == 0)
+				Session::set("admin", 0); //No es admin
+			else{
+				if ($admin == 1)
+					Session::set("admin", 1); //Es admin
+			}
+		}
+	}
+
 	if (isset($_POST['email'], $_POST['password'])) {
 		$email = trim($_POST['email']);
 		$password = trim($_POST['password']);		
@@ -28,6 +43,7 @@
 			Session::init();
 			Session::set("email", $email);
 			Session::set("conectado", 1);
+			tipoUsuario($email, $mysqli);
 			echo "Log in exitoso";
 		}
 		else // Inicio de sesión fallida

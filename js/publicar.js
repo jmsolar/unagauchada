@@ -1,4 +1,8 @@
-$('document').ready(function(){ 
+function limpiar_campos_pub(){
+	$('#publicar-form').trigger("reset");
+}
+
+$('document').ready(function(){
     $("#publicar-form").validate({
 		submitHandler: submitImage
     });
@@ -48,23 +52,24 @@ $('document').ready(function(){
 				if(response=="Publicacion exitosa"){
 					$("#error-publicar").fadeIn(1000, function(){
 						$("#error-publicar").html('<div class="alert alert-success"><strong>¡Exito! </strong><span>La publicación fue creada, espere unos minutos para poder verla en la lista de sus publicaciones activas</span></div>');
-						
+						$("#botonCancelarPublicar").attr('disabled', true);
+						$("#botonPublicar").attr('disabled', true);
+						setTimeout(' window.location.href = "../html/micuenta.php"; ',4000);	
 					});
-					location.reload();
 				}
 				else{
-					if(response=="No tiene credito"){
-						$("#error-publicar").fadeIn(1000, function(){	
-							$("#error-publicar").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>Debe tener un crédito para poder publicar</span></div>');
+					if(response=="Tiene publicaciones pendientes"){
+						$("#error-publicar").fadeIn(1000, function(){
+							$("#error-publicar").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>Verifique los datos ingresados</span></div>');
 						});
 					}
 					else{
-						if(response=="Publicacion exitosa"){
+						if (response=="Sin categoria"){
 							$("#error-publicar").fadeIn(1000, function(){
-								$("#error-publicar").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>Verifique los datos ingresados</span></div>');
-							});
-						}						
-					}
+								$("#error-publicar").html('<div class="alert alert-danger"><strong>¡Error! </strong><span>Debe seleccionar una categoria</span></div>');
+							});		
+						}	
+					}				
 				}
 			}
 		});
