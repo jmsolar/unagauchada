@@ -163,14 +163,112 @@
                     </div>
                 </div>
             </div>           
-        </form> 
+        </form>
+
+        <form id="nueva-categoria-form" method="POST" name="nueva_categoria_form">
+            <div class="modal fade" id="nueva_categoria" role="dialog" data-backdrop="static" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h5 class="modal-title" id="titulo">Nueva categoria</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col col-md-5">
+                                    <div class="form-group">
+                                        <label for="nombre">Nombre</label>
+                                        <input type="text" class="form-control" id="nombreAgregar" name="nombreAgregar" placeholder="Nombre de la nueva categoría" autofocus="autofocus" required>
+                                    </div>
+                                </div>
+                                <div class="col col-md-7">
+                                    <div class="list-group">
+                                        <label>Categorias existentes</label>
+                                        <?php mostrar_categorias_admin(); ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="error-nueva-categoria"></div>
+                        </div>                   
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="botonCancelarCategoria" data-dismiss="modal" onclick="limpiar_campos_nueva()">Cancelar</button>
+                            <button type="submit" class="btn btn-warning" id="botonAgregar">Nueva</button>
+                        </div>                
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form id="editar-categoria-form" method="POST" name="editar_categoria_form">
+            <div class="modal fade" id="editar_categoria" role="dialog" data-backdrop="static" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h5 class="modal-title" id="titulo">Editar nombre de categoria</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col col-md-7">
+                                    <div class="list-group">
+                                        <label>Categorias existentes</label>
+                                        <?php mostrar_categorias_admin_e(); ?>
+                                    </div>
+                                </div>
+                                <div class="col col-md-5">
+                                    <div class="form-group">
+                                        <label for="nombreNuevo">Nombre</label>
+                                        <input type="text" class="form-control" id="nombreNuevo" name="nombreNuevo" placeholder="Nombre nuevo" disabled="disabled" autofocus="autofocus" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="error-editar-categoria"></div>
+                        </div>                   
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="botonCancelarCategoriaEditar" data-dismiss="modal" onclick="limpiar_campos_editar()">Cancelar</button>
+                            <button type="submit" class="btn btn-warning" id="botonAceptar">Aceptar</button>
+                        </div>                
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form id="eliminar-categoria-form" method="POST" name="eliminar_categoria_form">
+            <div class="modal fade" id="eliminar_categoria" role="dialog" data-backdrop="static" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h5 class="modal-title" id="titulo">Eliminar una categoria</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col col-md-12">
+                                    <div class="list-group">
+                                        <label>Categorias existentes</label>
+                                        <?php mostrar_categorias_admin_e(); ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="error-eliminar-categoria"></div>
+                        </div>                   
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="botonCancelarCategoriaEliminar" data-dismiss="modal" onclick="limpiar_campos_eliminar()">Cancelar</button>
+                            <button type="submit" class="btn btn-warning" id="botonEliminar">Eliminar</button>
+                        </div>                
+                    </div>
+                </div>
+            </div>
+        </form>
 
         <div class="container">
             <div class="row">
-                <div class="col col-md-12">
+                <div class="col col-md-6">
                     <?php mostrarOpcionesUsuario(); ?>
                 </div>
-                <div class="col col-md-12">
+            </div>
+            <div class="row">
+                <div class="col col-md-6">
                     <div class="margin-top-20" id="info-comprar"></div>
                 </div>
             </div>
@@ -184,5 +282,8 @@
     <script src="../js/verPostulantes.js"></script>
     <script src="../js/jquery.validate.min.js"></script>
     <script src="../js/cerrarSesion.js"></script>
+    <script src="../js/nuevaCategoria.js"></script>
+    <script src="../js/editarCategoria.js"></script>
+    <script src="../js/eliminarCategoria.js"></script>
     </body>
 </html>

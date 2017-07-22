@@ -272,6 +272,31 @@
 		echo'</select>';
 	}
 
+	function mostrar_categorias_admin_e(){
+		include('../includes/db_connect.php');		
+		$stmt=$mysqli->prepare("SELECT titulo FROM Categoria");
+		$stmt->execute();    // Ejecuta la consulta preparada.
+		$res = $stmt->get_result();
+		echo '<ul class="list-group">';
+		$i=0;
+		while($row = $res->fetch_assoc()){
+			echo '<a href="#" data-alias="elem'.$i.'" class="list-group-item">'.$row["titulo"].'</a>';
+			$i++;
+		}
+		echo '</ul>';
+	}
+
+	function mostrar_categorias_admin(){
+		include('../includes/db_connect.php');		
+		$stmt=$mysqli->prepare("SELECT titulo FROM Categoria");
+		$stmt->execute();    // Ejecuta la consulta preparada.
+		$res = $stmt->get_result();
+		echo '<div class="list-group">';
+		while($row = $res->fetch_assoc())
+			echo '<li class="list-group-item">'.$row["titulo"].'</li>';
+		echo '</div>';
+	}
+
 	function mostrar_ciudades(){
 		include('../includes/db_connect.php');
 		echo'<select class="form-control" id="ciu" name="filtrarCiudad">';
@@ -309,6 +334,20 @@
 	            <button type="submit" class="btn btn-md btn-success" onclick="verificar_creditos()">Publicar</button>
 	            <button type="button" class="btn btn-md btn-warning" data-toggle="modal" data-target="#comprarCredito">Comprar crédito</button>';
 	    }
-	    else
-	    	echo "ES UN ADMINISTRADOR";
+	    else{
+	    	echo '
+				    <div class="row" style="background-color: rgba(0,0,0, 0.1)!important; border-radius: 8px; padding:16px">
+                        <div class="col col-md-12">
+                            <h3>Administración de categorias</h3>
+                            <div class="row">
+                            	<div class="col col-md-12">';
+                            		mostrar_categorias_admin();
+                            	echo'</div>                            	
+                            </div>
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#nueva_categoria">Agregar</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editar_categoria">Editar</button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminar_categoria">Eliminar</button>
+                        </div>
+                    </div>';
+	    }
 	}
