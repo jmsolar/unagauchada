@@ -17,7 +17,6 @@
     </head>
     <?php require_once( "../includes/functions.php" );?>
     <?php require( "../process/process_perfil.php" );?>    
-    <?php require( "../process/process_detallar.php" );?>
     <?php Session::init(); ?>
     <?php $idPerfil = $_GET['id']; ?>
 

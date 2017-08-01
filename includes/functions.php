@@ -352,6 +352,20 @@
 			}
 		}
 	}
+	
+	//Rangos
+	function getRanking($reputacion, $mysqli){
+		if ($stmt=$mysqli->prepare("SELECT r.nombre FROM rangoreputacion r
+		WHERE r.puntosIni <= $reputacion AND r.puntosFin >= $reputacion")){
+			$stmt->execute();    // Ejecuta la consulta preparada.
+			$stmt->store_result();
+			$stmt->bind_result($rankingRes);
+			$stmt->fetch();
+			return $rankingRes;
+		}
+		return 'Sin definir';
+	}
+
 
 	function mostrarOpcionesUsuario(){
 		Session::init();
