@@ -137,7 +137,7 @@
         </form>
 
         <form id="calificar-form" method="POST" name="calificar_form">
-             <div class="modal fade" id="calificar" role="dialog" data-backdrop="static">
+            <div class="modal fade" id="calificar" role="dialog" data-backdrop="static">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -263,17 +263,14 @@
 
         <div class="container">
             <div class="row">
-                <div class="col col-md-6">
-                    <?php mostrarOpcionesUsuario(); ?>
-                </div>
+                <?php mostrarOpcionesUsuario(); ?>
             </div>
             <div class="row">
                 <div class="col col-md-6">
                     <div class="margin-top-20" id="info-comprar"></div>
                 </div>
             </div>
-        </div>
-
+        </div>    
     <script src="../js/jquery-3.2.1.min.js"></script>    
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/comprar.js"></script>
