@@ -37,14 +37,23 @@
 	}
 
 	if (isset($_POST['email'], $_POST['password'])) {
+
 		$email = trim($_POST['email']);
 		$password = trim($_POST['password']);		
 		if (login($email, $password, $mysqli) == true){ // Inicio de sesión exitosa
-			Session::init();
-			Session::set("email", $email);
-			Session::set("conectado", 1);
-			tipoUsuario($email, $mysqli);
-			echo "Log in exitoso";
+			if ($stmt=$mysqli->prepare("SELECT u.idUsuario FROM usuario u WHERE u.email <= '".$email."'")){
+				$stmt->execute();    // Ejecuta la consulta preparada.
+				$stmt->store_result();
+				$stmt->bind_result($rankingRes);
+				$stmt->fetch();
+				Session::init();
+				Session::set("email", $email);
+				Session::set("conectado", 1);
+				Session::set("userid", $rankingRes);
+				tipoUsuario($email, $mysqli);
+				echo "Log in exitoso";			
+			}
+			
 		}
 		else // Inicio de sesión fallida
 			echo "Log in fallido";

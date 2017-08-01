@@ -11,7 +11,7 @@
 	$detalleId = $mysqli->real_escape_string($detalleId);
 
 	//gauchadas
-	$stmt=$mysqli->prepare("SELECT * FROM gauchada INNER JOIN usuario USING (idUsuario)  WHERE idGauchada = '".$detalleId ."'");
+	$stmt=$mysqli->prepare("SELECT gauchada.*, usuario.*, categoria.titulo AS categoria FROM gauchada INNER JOIN usuario ON gauchada.idUsuario = usuario.idUsuario INNER JOIN categoria ON categoria.idCategoria = gauchada.idCategoria WHERE idGauchada = '".$detalleId ."'");
 	$stmt->execute();
 	$gauchadasRes = $stmt->get_result();
 	$gauchadasRes = $gauchadasRes->fetch_object();
@@ -38,3 +38,24 @@
 	WHERE g.idGauchada = '".$detalleId ."'";
 
 	$comentariosRes = mysqli_fetch_all($mysqli->query($query), MYSQLI_ASSOC);
+	
+	//Postulantes
+	$query = "SELECT p.*, u.* FROM postulante p 
+	INNER JOIN usuario u
+	ON p.idPostulante = u.idUsuario
+	WHERE p.idGauchada = '".$detalleId ."'";
+
+	$postulanteRes = mysqli_fetch_all($mysqli->query($query), MYSQLI_ASSOC);
+
+	//Rangos
+	function getRanking($reputacion, $mysqli){
+		if ($stmt=$mysqli->prepare("SELECT r.nombre FROM rangoreputacion r
+		WHERE r.puntosIni <= $reputacion AND r.puntosFin >= $reputacion")){
+			$stmt->execute();    // Ejecuta la consulta preparada.
+			$stmt->store_result();
+			$stmt->bind_result($rankingRes);
+			$stmt->fetch();
+			return $rankingRes;
+		}
+		return 'Sin definir';
+	}

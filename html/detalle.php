@@ -58,7 +58,7 @@
 
                                         <div class="row">Fecha de vencimiento: <?=$gauchadasRes->fechaVencimiento?></div>
                                         <div class="row"><div role="presentation">Postulantes <span class="badge"><?=$nroPostulantes?></span></div> </div>
-                                        <div class="row">Estado: <span class="label label-info"><?=$gauchadasRes->estado?></span></div>
+                                        <div class="row">Categoria: <span class="label label-info"><?=$gauchadasRes->categoria?></span></div>
                                         <div class="row">Publicador: <?=$nombreCompleto?></div>
                                         <div class="row">Ciudad: <?=$gauchadasRes->ciudad?></div>
                                     </div>
@@ -76,12 +76,67 @@
                                     <a data-toggle="modal" data-target="#postularModal" class="btn btn-success">Postularme</a>
                                 <?php elseif (Session::get('conectado') == 1 && $gauchadasRes->email !== Session::get('email')):?>
                                     <a class="btn btn-info"">Editar Gauchada</a>
-                                    <a class="btn btn-success"">Ver Postulantes</a>
+                                    <a class="btn btn-success">Ver Postulantes</a>
                                 <?php endif; ?>
 
                                 <a href="home.php" class="btn btn-warning">Volver al listado</a>                            
                             </div>
                             <hr>
+                            <?php if (Session::get('conectado') == 1 && $gauchadasRes->email == Session::get('email') && $gauchadasRes->estado == "activa"): ?>
+                            <div class="row">
+                                <h3>Postulantes</h3>
+                            </div>
+                            <div id="errorMsg" style="display:none">No se pudo aceptar el postulante, por favor intentar de nuevo</div>
+                             <?php if(sizeof($postulantesRes)): ?>
+                                <table class="table table-hover">
+                            <tr>
+                            <th width="25%">Nombre</th>
+                            <th width="25%">Ranking</th>
+                            <th width="25%">Perfil</th>
+                            <th width="25%">Seleccionar Postulante</th>
+                            </tr>
+                            <?php foreach($postulantesRes as $postulante): ?>
+                                <tr>
+                                    <td><?=$postulante['nombre']?> <?=$postulante['apellido']?></td>
+                                    <td><?=getRanking($postulante['reputacion'], $mysqli)?></td>
+                                    <td><a href="perfil.php?id=<?=$postulante['idPostulante']?>">Ver Perfil</a></td>
+                                    <td><a href="javascript:aceptarPostulante(<?php echo($postulante['idUsuario'])?>, <?=$_GET['id']?>)">Aceptar</a></td>
+                                </tr>
+                            <?php endforeach ?>
+                            </table>
+                            <?php else: ?>
+                                <div>No hay postulantes para esta publicacion</div>
+                                <br/>
+                            <?php endif; ?>
+                        <?php endif; ?>
+
+                            <?php if (Session::get('conectado') == 1 && $gauchadasRes->email == Session::get('email') && $gauchadasRes->estado == "cerrada"):?>
+                            <div class="row">
+                                <h3>Calificar Postulante</h3>
+                                <form>
+                                    <div class="row">
+                                        <select class="col col-md-offset-1 col-md-4" id="calificacion">
+                                            <option value="1">Positivo</option>
+                                            <option value="0">Neutral</option>
+                                            <option value="-1">Negativo</option>
+                                        </select>
+                                    </div>
+                                    <div class="row" style="margin-top: 10px">
+                                        <textarea class="col col-md-offset-1 col-md-4" id="calificacionComentario"></textarea>
+                                    </div>
+                                    <div class="row" style="margin-top: 10px">
+                                        <div class="col col-md-offset-1 col-md-4" id="errorMsg" style="display:none; color: red;">El comentario no puede ser vacio</div>
+                                    </div>
+                                    <input type="hidden" id="idGauchada" value="<?=$_GET['id']?>"></textarea>
+                                    <div class="row" style="margin-top: 15px">
+                                        <div class="col col-md-offset-4 col-md-1" ><a class="btn btn-success" onclick="calificarPostulante()">Calificar</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <hr>
+                        <?php endif; ?>
+
                             <div class="row">
                                 <h4>Comentarios</h4>
                                 <?php if(sizeof($comentariosRes)): ?>
@@ -122,6 +177,44 @@
                 </div>
             </div>
         </div>
+
+
+<!--Aceptar Postulante-->
+<script>
+function aceptarPostulante(idPostulante, idGauchada){
+    alert("Postulante "+idPostulante+" has been accepted for Gauchada "+idGauchada+"!");
+    $.ajax({
+        type: "POST",
+        data: {postulante: idPostulante, gauchada: idGauchada},
+        url: "../process/process_aceptar_postulante.php",
+        success: function(data){
+            location.reload();
+        },
+        error: function(data) {
+            $('#errorMsg').html(data.responseText).show();
+        }
+    });
+            
+}
+
+function calificarPostulante(){
+    if (!$('#calificacionComentario').val()) {
+        $('#errorMsg').show();
+        return;
+    };
+    $.ajax({
+        type: "POST",
+        data: {calificacion: $('#calificacion').val(), gauchada: $('#idGauchada').val(), comentario: $('#calificacionComentario').val()},
+        url: "../process/process_calificar.php",
+            success: function(data){
+                location.reload();
+            },
+            error: function(data) {
+                $('#errorMsg').html(data.responseText).show();
+            }
+        });
+    }
+</script>
 
 
 
@@ -280,6 +373,7 @@
             }
 
       </script>
+
       <script src="../js/cerrarSesion.js"></script>
     </div>
     

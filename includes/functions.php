@@ -312,7 +312,8 @@
 	function usuario_logueado(){
 		Session::init();
 		$email=Session::get("email");
-		echo '<li><a class="no-link"><b>'.$email.'</b></a></li>';
+		$id = Session::get("userid");
+		echo '<li><a href="perfil.php?id='.$id.'"><b>'.$email.'</b></a></li>';
 	}
 
 	function ver_opcion_usuario(){

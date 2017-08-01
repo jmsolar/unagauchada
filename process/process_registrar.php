@@ -8,9 +8,9 @@
 			$stmt->store_result();
 			$stmt->bind_result($cantidad);
 			$stmt->fetch();
-			if ($cantidad == 0)
+			if ($cantidad == 0){
 				return false;
-			else
+			} else
 				return true;
 		}
 	}
