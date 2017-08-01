@@ -54,7 +54,7 @@
                     <div class="row"><b>Nombre: </b><?= $perfil->nombre ?></div>
                     <div class="row"><b>Apellido: </b><?= $perfil->apellido ?></div>
                     <div class="row"><b>Fecha de Nacimiento: </b><?= $perfil->fechaNacimiento?></div>
-                    <div class="row"><b>Ranking: </b><?=getRanking($perfil->reputacion, $mysqli)?> </div>
+                    <div class="row"><b>Ranking: </b><?=calulateRanking($perfil->reputacion, $mysqli)?> </div>
                     <hr>
                     <?php if (Session::get('conectado') == 1 && $perfil->email == Session::get('email')): ?>
                     <h4>Datos de Contacto</h4>

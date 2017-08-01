@@ -354,7 +354,7 @@
 	}
 	
 	//Rangos
-	function getRanking($reputacion, $mysqli){
+	function calulateRanking($reputacion, $mysqli){
 		if ($stmt=$mysqli->prepare("SELECT r.nombre FROM rangoreputacion r
 		WHERE r.puntosIni <= $reputacion AND r.puntosFin >= $reputacion")){
 			$stmt->execute();    // Ejecuta la consulta preparada.
