@@ -18,7 +18,8 @@
     </head>
     <?php require_once( "../includes/functions.php" );?>
     <?php Session::init(); ?>
-    <body>
+    <body class="home-container">
+        <?php error_reporting(0); ?>
         <nav class="navbar navbar-inverse no-border-radius">
             <div class="container-fluid">
                 <div class="navbar-header">

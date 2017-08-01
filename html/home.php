@@ -163,7 +163,7 @@
                                                     <div class="row">
                                                         <div class="col col-md-4">
                                                             <select class="form-control" id="orden" name="orden">
-                                                                <option value="" disabled selected>Selecciona un campo</option>
+                                                                <option value="" disabled selected>Selecciona una criterio</option>
                                                                 <option>cantidad de postulantes</option>
                                                                 <option>fecha de creacion</option>
                                                                 <option>titulo</option>

@@ -148,7 +148,7 @@
 		return true;
 	}
 
-	function mostrar_ordenacion($orden, $tipoOrden){
+	function mostrar_ordenacion($orden, $tipoOrden, $buscar){
 		echo '
 		<form id="buscar-form" method="GET" name="buscar_form" action="../html/busqueda.php">
             <div class="row margin-top-20">
@@ -159,8 +159,8 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col col-md-4">
-                                        <select class="form-control" id="orden" name="orden">
-                                            <option value="" disabled selected>'.$orden.'</option>
+                                        <select class="form-control" id="orden" name="orden"> 
+                                        	<option value="" disabled>'.$orden.'</option>                                          
                                             <option>cantidad de postulantes</option>
                                             <option>fecha de creacion</option>
                                             <option>titulo</option>
@@ -168,13 +168,13 @@
                                     </div>
                                     <div class="col col-md-3">
 	                                    <select class="form-control" id="tipoOrden" name="tipoOrden">
-	                                    	<option value="" selected>'.$tipoOrden.'</option>
+	                                    	<option value="" disabled>'.$tipoOrden.'</option>
 	                                        <option>Ascendente</option>
 	                                        <option>Descendente</option>
 	                                    </select>
                                    	</div>
                                    	<div class="col col-md-4 pull-right">
-                                        <input type="submit" class="btn btn-success" id="botonBuscar" name="reordenar" value="Reordenar" onclick="reordenar_datos();">
+                                        <input type="submit" class="btn btn-success" value="Reordenar" >
                                     </div>
                                	</div>
                            	</div>
@@ -182,6 +182,7 @@
                     </div>
                 </div>
             </div>
+            <input type="text" class="form-control" id="buscar" name="busqueda" value="'.$buscar.'" style="display:none!important">
         </form>
         <hr>';
 	}
@@ -242,7 +243,7 @@
 				Session::init(); Session::set("respuesta", $rows);
 				mostrar_busqueda($buscar, $mysqli);
 				mostrar_filtros($categoria, $ciudad);
-				mostrar_ordenacion($orden, $tipoOrden);
+				mostrar_ordenacion($orden, $tipoOrden, $buscar);
 				datos($orden, $tipoOrden);
 			}
 		}
@@ -273,7 +274,7 @@
 	}
 
 	function mostrar_categorias_admin_e(){
-		include('../includes/db_connect.php');		
+		include('../includes/db_connect.php');	
 		$stmt=$mysqli->prepare("SELECT titulo FROM Categoria");
 		$stmt->execute();    // Ejecuta la consulta preparada.
 		$res = $stmt->get_result();
@@ -294,6 +295,17 @@
 		echo '<div class="list-group">';
 		while($row = $res->fetch_assoc())
 			echo '<li class="list-group-item">'.$row["titulo"].'</li>';
+		echo '</div>';
+	}
+
+	function mostrar_categorias_admin_list(){
+		include('../includes/db_connect.php');		
+		$stmt=$mysqli->prepare("SELECT titulo FROM Categoria");
+		$stmt->execute();    // Ejecuta la consulta preparada.
+		$res = $stmt->get_result();
+		echo '<div class="list-group">';
+		while($row = $res->fetch_assoc())
+			echo '<li class="list-group-item margin-4">'.$row["titulo"].'</li>';
 		echo '</div>';
 	}
 
@@ -320,11 +332,28 @@
 		Session::init();
 		$estado=Session::get("conectado");
 		if ($estado == 1){
-			echo '<li><a class="no-link" href="miCuenta.php">Mi Cuenta</a></li>';
+			echo '<li><a class="no-link" href="micuenta.php">Mi Cuenta</a></li>';
 			echo '<li><a class="link" onclick="cerrar_sesion()">Cerrar sesión</a></li>';
 		}
 		else
 			echo '<li><a href="login.html" class="link">Login</a></li>';
+	}
+
+	function ver_ranking(){
+		include('../includes/db_connect.php');
+		$valor=$_POST["ranking"];
+		if ($stmt=$mysqli->prepare("SELECT nombre, puntos FROM Usuario u INNER JOIN Calificacion c ON idUsuarioAnunciante = u.idUsuario ORDER BY puntos DESC, nombre ASC LIMIT $valor")){
+			$stmt->execute();
+			$res = $stmt->get_result();
+			while($row = $res->fetch_assoc()){
+				echo '<tr>';
+				echo '<td>'.$row["nombre"].'</td>';
+				echo '<td>'.$row["puntos"].'</td>';
+				echo '</tr>';
+			}
+		}
+		else
+			echo "<tr><td>no entre</d></tr>";
 	}
 
 	function mostrarOpcionesUsuario(){
@@ -337,18 +366,89 @@
 	    }
 	    else{
 	    	echo '
-				    <div class="row" style="background-color: rgba(0,0,0, 0.1)!important; border-radius: 8px; padding:16px">
-                        <div class="col col-md-12">
-                            <h3>Administración de categorias</h3>
-                            <div class="row">
-                            	<div class="col col-md-12">';
-                            		mostrar_categorias_admin();
-                            	echo'</div>                            	
-                            </div>
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#nueva_categoria">Agregar</button>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editar_categoria">Editar</button>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminar_categoria">Eliminar</button>
+                <div class="col col-md-4 margin-bottom-20 margin-sides-16" style="background-color: rgba(0,0,0, 0.1)!important; border-radius: 8px; padding:16px">
+                    <h3>Administración de categorias</h3>
+                    <h5>Estas son las categorias utilizadas en las gauchadas</h5>
+                    <div class="row">
+                        <div class="col col-md-12">';
+                            mostrar_categorias_admin_list();
+                   echo'</div>
+                   		<div class="margin-sides-16"> 
+	                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#nueva_categoria">Agregar</button>
+	                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editar_categoria">Editar</button>
+	                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminar_categoria">Eliminar</button>
                         </div>
-                    </div>';
+                    </div>
+                </div>
+                <div class="col col-md-6 margin-sides-16" style="background-color: rgba(0,0,0, 0.1)!important; border-radius: 8px; padding:16px">
+                   	<h3>Estadistica de ingresos</h3>
+                   	<h5>Con esta herramientas vas a poder consultar el ingreso en un período de tiempo</h5>
+                   	<div class="row">
+                   		<div class="col col-md-12">
+							<form id="estadistica-form" method="POST" name="estadistica_form">
+								<h6>Selccione las fechas del período</h6>
+				                <div class="row">
+				                	<div class="col col-md-12">
+										<div class="row">
+				                			<div class="col col-md-4">
+										    	<div class="form-group">
+		                                			<label for="fechaInicio">Fecha inicio</label>
+		                                			<input type="date" class="form-control" id="fechaInicio" name="fechaInicio" value="2017-08-01" required>
+		                                		</div>
+		                                	</div>
+											<div class="col col-md-4">
+										    	<div class="form-group">
+		                                			<label for="fechaFin">Fecha fin</label>	
+										    		<input type="date" class="form-control" id="fechaFin" name="fechaFin" value="2017-08-01" required>
+										      	</div>
+										    </div>
+											<div class="col col-md-4" style="margin-top:25px!important">
+												<div class="form-group">
+								      	   			<button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#estadistica" data-id="1">Consultar</button>
+								      	   		</div>
+								      	   	</div>
+								      	</div>
+								    </div>
+				                </div>
+				            </form>
+				        </div>
+                    </div>
+                </div>
+                <div class="col col-md-6 margin-sides-16 margin-top-20" style="background-color: rgba(0,0,0, 0.1)!important; border-radius: 8px; padding:16px">
+                   	<h3>Ranking de usuarios</h3>
+                   	<h5>Con esta herramientas vas a poder ver los usuarios con mayor puntaje</h5>
+                   	<div class="row">
+                   		<div class="col col-md-12">
+							<form id="ranking-form" name="ranking_form" method="GET">
+				                <div class="row">
+				                	<div class="col col-md-8">
+								    	<div class="form-group">
+								      		<select class="form-control" id="ranking" name="ranking">
+								      			<option>3</option><option>4</option>
+								      			<option>5</option><option>7</option>
+								      		</select>
+								      	</div>
+								    </div>
+								    <div class="col col-md-4">
+								    	<button type="button" class="btn btn-success" data-toggle="collapse" data-target="#rank">Ver ranking</button>
+								    </div>
+				                </div>
+				                <div id="rank" class="collapse margin-top-20">
+				                	<table class="table table-striped">
+                                		<thead>
+                                			<tr>
+                                				<th><b>Usuario</b></th>
+                                				<th><b>Puntaje</b></th>
+                                			</tr>
+                                		</thead>
+                                		<tbody>';
+				                			ver_ranking();
+									echo'</tbody>
+                            		</table>
+                            	</div>
+				            </form>
+				        </div>
+                    </div>
+                </div>';
 	    }
 	}
