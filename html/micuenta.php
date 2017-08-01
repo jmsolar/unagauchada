@@ -68,7 +68,7 @@
                                 <div class="col col-md-6">
                                     <div class="form-group">
                                         <label for="fecVencimiento">Fecha de vencimiento</label>
-                                        <input type="date" class="form-control" id="fecVencimiento" name="fecVencimiento" value="2017-07-04" required>
+                                        <input type="date" class="form-control" id="fecVencimiento" name="fecVencimiento" value="2017-08-09" required>
                                     </div>
                                 </div>
                                 <div class="col col-md-6">

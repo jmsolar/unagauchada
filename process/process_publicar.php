@@ -4,7 +4,7 @@
 	include '../includes/session.php';
 
 	function cant_creditos($email, $mysqli){	
-		if ($stmt=$mysqli->prepare("SELECT cantCreditos FROM Usuario WHERE email = ?")){
+		if ($stmt=$mysqli->prepare("SELECT cantCreditos FROM usuario WHERE email = ?")){
 			$stmt->bind_param('s', $email);  // Une $email al parámetro.
 			$stmt->execute();    // Ejecuta la consulta preparada.
 			$stmt->store_result();
@@ -23,7 +23,7 @@
 	}
 
     function tiene_publicacion_pendiente($email, $mysqli) {
-		if ($stmt=$mysqli->prepare("SELECT COUNT(idUsuario) FROM Usuario u INNER JOIN Gauchada g ON g.idUsuario = u.idUsuario INNER JOIN ON Calificacion c ON c.idUsuario <> u.idUsuario WHERE u.email = ? LIMIT 1")) {
+		if ($stmt=$mysqli->prepare("SELECT COUNT(idUsuario) FROM usuario u INNER JOIN Gauchada g ON g.idUsuario = u.idUsuario INNER JOIN ON Calificacion c ON c.idUsuario <> u.idUsuario WHERE u.email = ? LIMIT 1")) {
 			$stmt->bind_param('s', $email);  // Une $email al parámetro.
 			$stmt=$stmt->execute();    // Ejecuta la consulta preparada.
 			$stmt->close();
@@ -37,7 +37,7 @@
 	}
 
 	function idUsuario($email, $mysqli){
-		if ($stmt=$mysqli->prepare("SELECT idUsuario FROM Usuario WHERE email = ? LIMIT 1")) {
+		if ($stmt=$mysqli->prepare("SELECT idUsuario FROM usuario WHERE email = ? LIMIT 1")) {
 			$stmt->bind_param('s', $email);  // Une $email al parámetro.
 			$stmt->execute();    // Ejecuta la consulta preparada.
 			$stmt->store_result();
@@ -52,7 +52,8 @@
 	function publicar($titulo, $descripcion, $fecVencimiento, $categoria,$imagen, $ciudad, $email, $mysqli){
 		$fnac=date("Y-m-d", strtotime($fecVencimiento));
 		$res=intval(idUsuario($email, $mysqli));
-		if ($stmt=$mysqli->prepare("INSERT INTO Gauchada (`titulo`, `descripcion`, `fechaCreacion`, `fechaVencimiento`, `imagen`, `ciudad`, `estado`, `idUsuario`, `idCandidato`) VALUES ('$titulo', '$descripcion', CURDATE(), '$fecVencimiento', '$imagen', '$ciudad', 'activa', ?, NULL)")){
+		if ($stmt=$mysqli->prepare("INSERT INTO gauchada (`titulo`, `descripcion`, `fechaCreacion`, `fechaVencimiento`, `imagen`, `ciudad`, `estado`, `idCategoria`, `idUsuario`, `idCandidato`) VALUES ('$titulo', '$descripcion', CURDATE(), '$fecVencimiento', '$imagen', '$ciudad', 'activa', '$categoria', '$res', NULL)")){
+			echo "INSERT INTO Gauchada (`titulo`, `descripcion`, `fechaCreacion`, `fechaVencimiento`, `imagen`, `ciudad`, `estado`, `idUsuario`, `idCandidato`) VALUES ('$titulo', '$descripcion', CURDATE(), '$fecVencimiento', '$imagen', '$ciudad', 'activa', $res, NULL)";
 			$stmt->execute();    // Ejecuta la consulta preparada
 			$stmt->close();
 			return true;
@@ -64,7 +65,7 @@
 	function actualizar_creditos($email, $mysqli){
 		$cred_act=cant_creditos($email, $mysqli) - 1;		
 
-		if ($stmt=$mysqli->prepare("UPDATE Usuario SET `cantCreditos` = ? WHERE email = ?")){
+		if ($stmt=$mysqli->prepare("UPDATE usuario SET `cantCreditos` = ? WHERE email = ?")){
 			$stmt->bind_param('is', $cred_act, $email);  // Une $email al parámetro.
 			$stmt->execute();    // Ejecuta la consulta preparada.
 			$stmt->close();
@@ -74,7 +75,7 @@
 	}
 
 	function existe_categoria($titulo, $mysqli){
-		if ($stmt=$mysqli->prepare("SELECT idCategoria FROM Categoria WHERE titulo = ?")){
+		if ($stmt=$mysqli->prepare("SELECT idCategoria FROM categoria WHERE titulo = ?")){
 			$stmt->bind_param('s', $titulo);  // Une $email al parámetro.
 			$stmt->execute();    // Ejecuta la consulta preparada.
 			$stmt->store_result();
@@ -86,7 +87,7 @@
 	}
 
 	function ult_gauchada($idUsuario, $mysqli){		
-		$stmt=$mysqli->prepare("SELECT idGauchada FROM Gauchada WHERE idUsuario = ? ORDER BY idGauchada DESC LIMIT 1");
+		$stmt=$mysqli->prepare("SELECT idGauchada FROM gauchada WHERE idUsuario = ? ORDER BY idGauchada DESC LIMIT 1");
 		$stmt->bind_param('i', $idUsuario);  // Une $email al parámetro.
 		$stmt->execute();    // Ejecuta la consulta preparada.
 		$stmt->store_result();
@@ -97,7 +98,7 @@
 	}
 
 	function ult_categoria($mysqli){
-		$stmt=$mysqli->prepare("SELECT idCategoria FROM Categoria ORDER BY idCategoria DESC LIMIT 1");
+		$stmt=$mysqli->prepare("SELECT idCategoria FROM categoria ORDER BY idCategoria DESC LIMIT 1");
 		$stmt->execute();    // Ejecuta la consulta preparada.
 		$stmt->store_result();
 		$stmt->bind_result($idCategoria);
@@ -107,6 +108,7 @@
 	}
 
 	if (isset($_POST['titulo'], $_POST['descripcion'], $_POST['fecVencimiento'], $_POST['filtrarCategoria'], $_POST['ciudad'])) {
+		echo "1";
 		if(isset($_POST['image']) && ($_POST['image'] != 'undefined'))
 			$imagen = trim($_POST['image']);
 		else
@@ -121,8 +123,11 @@
 		$email=Session::get("email");
 
 		if (tiene_credito($email, $mysqli)){
+			echo "4";
 			if (!tiene_publicacion_pendiente($email, $mysqli)){
+				echo "5";
 				if (publicar($titulo, $descripcion, $fecVencimiento, $categoria, $imagen, $ciudad, $email, $mysqli)){
+					echo "6";
 					actualizar_creditos($email, $mysqli);
 					echo "Publicacion exitosa";
 				} else

@@ -252,24 +252,24 @@
 	function mostrar_categorias(){
 		include('../includes/db_connect.php');
 		echo'<select class="form-control" id="cate" name="filtrarCategoria">';		
-		$stmt=$mysqli->prepare("SELECT titulo FROM Categoria");
+		$stmt=$mysqli->prepare("SELECT * FROM Categoria");
 				$stmt->execute();    // Ejecuta la consulta preparada.
 				$res = $stmt->get_result();
 				echo '<option value="" disabled selected>Selecciona una categoria</option>';
 				while($row = $res->fetch_assoc())
-					echo '<option>'.$row["titulo"].'</option>';
+					echo '<option value="'.$row["idCategoria"].'">'.$row["titulo"].'</option>';
 		echo'</select>';
 	}
 
 	function mostrar_categorias_cuenta(){
 		include('../includes/db_connect.php');
 		echo'<select class="form-control" id="cate" name="filtrarCategoria" required>';		
-		$stmt=$mysqli->prepare("SELECT titulo FROM Categoria");
+		$stmt=$mysqli->prepare("SELECT * FROM Categoria");
 				$stmt->execute();    // Ejecuta la consulta preparada.
 				$res = $stmt->get_result();
 				echo '<option value="" disabled selected>Selecciona una categoria</option>';
 				while($row = $res->fetch_assoc())
-					echo '<option>'.$row["titulo"].'</option>';
+					echo '<option value="'.$row["idCategoria"].'">'.$row["titulo"].'</option>';
 		echo'</select>';
 	}
 
