@@ -252,24 +252,24 @@
 	function mostrar_categorias(){
 		include('../includes/db_connect.php');
 		echo'<select class="form-control" id="cate" name="filtrarCategoria">';		
-		$stmt=$mysqli->prepare("SELECT * FROM Categoria");
+		$stmt=$mysqli->prepare("SELECT titulo FROM Categoria");
 				$stmt->execute();    // Ejecuta la consulta preparada.
 				$res = $stmt->get_result();
 				echo '<option value="" disabled selected>Selecciona una categoria</option>';
 				while($row = $res->fetch_assoc())
-					echo '<option value="'.$row["idCategoria"].'">'.$row["titulo"].'</option>';
+					echo '<option>'.$row["titulo"].'</option>';
 		echo'</select>';
 	}
 
 	function mostrar_categorias_cuenta(){
 		include('../includes/db_connect.php');
 		echo'<select class="form-control" id="cate" name="filtrarCategoria" required>';		
-		$stmt=$mysqli->prepare("SELECT * FROM Categoria");
+		$stmt=$mysqli->prepare("SELECT titulo FROM Categoria");
 				$stmt->execute();    // Ejecuta la consulta preparada.
 				$res = $stmt->get_result();
 				echo '<option value="" disabled selected>Selecciona una categoria</option>';
 				while($row = $res->fetch_assoc())
-					echo '<option value="'.$row["idCategoria"].'">'.$row["titulo"].'</option>';
+					echo '<option>'.$row["titulo"].'</option>';
 		echo'</select>';
 	}
 
@@ -324,8 +324,7 @@
 	function usuario_logueado(){
 		Session::init();
 		$email=Session::get("email");
-		$id = Session::get("userid");
-		echo '<li><a href="perfil.php?id='.$id.'"><b>'.$email.'</b></a></li>';
+		echo '<li><a class="no-link"><b>'.$email.'</b></a></li>';
 	}
 
 	function ver_opcion_usuario(){
@@ -341,7 +340,7 @@
 
 	function ver_ranking(){
 		include('../includes/db_connect.php');
-		$valor=$_POST["ranking"];
+		$valor=$_POST['ranking'];
 		if ($stmt=$mysqli->prepare("SELECT nombre, puntos FROM Usuario u INNER JOIN Calificacion c ON idUsuarioAnunciante = u.idUsuario ORDER BY puntos DESC, nombre ASC LIMIT $valor")){
 			$stmt->execute();
 			$res = $stmt->get_result();
@@ -352,8 +351,6 @@
 				echo '</tr>';
 			}
 		}
-		else
-			echo "<tr><td>no entre</d></tr>";
 	}
 
 	function mostrarOpcionesUsuario(){
@@ -430,21 +427,9 @@
 								      	</div>
 								    </div>
 								    <div class="col col-md-4">
-								    	<button type="button" class="btn btn-success" data-toggle="collapse" data-target="#rank">Ver ranking</button>
+								    	<button type="button" class="btn btn-success rankear" data-toggle="modal" data-target="#rankear">Ver ranking</button>
 								    </div>
 				                </div>
-				                <div id="rank" class="collapse margin-top-20">
-				                	<table class="table table-striped">
-                                		<thead>
-                                			<tr>
-                                				<th><b>Usuario</b></th>
-                                				<th><b>Puntaje</b></th>
-                                			</tr>
-                                		</thead>
-                                		<tbody>';
-				                			ver_ranking();
-									echo'</tbody>
-                            		</table>
                             	</div>
 				            </form>
 				        </div>

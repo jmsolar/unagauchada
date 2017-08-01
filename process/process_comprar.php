@@ -110,6 +110,17 @@
 		return false;
 	}
 
+	function agregar_ingreso($credito, $idUsuario, $mysqli){
+		$monto=$credito * 10;
+		if ($stmt=$mysqli->prepare("INSERT INTO Ingreso (`fecha`, `monto`, `idUsuario`) VALUES (CURDATE(), '$monto','$idUsuario')")){
+			$stmt->execute();    // Ejecuta la consulta preparada
+			$stmt->close();
+			return true;
+		} 
+		else
+			return false;
+	}
+
 	if (isset($_POST['tarjeta'], $_POST['credito'], $_POST['codigo'])) {
 		$tarjeta = trim($_POST['tarjeta']);
 		$credito = trim($_POST['credito']);
@@ -121,8 +132,11 @@
 		if (datosValidos($tarjeta, $codigo, $idUsuario, $mysqli)){
 			if (tieneSaldo($tarjeta, $credito, $mysqli)){
 				if(actualizar_saldo($tarjeta, $credito, $mysqli)){
-					actualizar_credito($credito, $idUsuario, $mysqli);
-					echo "Compra exitosa";
+					if (actualizar_credito($credito, $idUsuario, $mysqli)){
+						if (agregar_ingreso($credito, $idUsuario, $mysqli)){
+							echo "Compra exitosa";
+						}
+					}
 				}
 			}
 			else

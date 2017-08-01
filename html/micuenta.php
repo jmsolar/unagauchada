@@ -68,7 +68,7 @@
                                 <div class="col col-md-6">
                                     <div class="form-group">
                                         <label for="fecVencimiento">Fecha de vencimiento</label>
-                                        <input type="date" class="form-control" id="fecVencimiento" name="fecVencimiento" value="2017-08-09" required>
+                                        <input type="date" class="form-control" id="fecVencimiento" name="fecVencimiento" value="2017-07-04" required>
                                     </div>
                                 </div>
                                 <div class="col col-md-6">
@@ -256,6 +256,36 @@
                             <button type="button" class="btn btn-secondary" id="botonCancelarCategoriaEliminar" data-dismiss="modal" onclick="limpiar_campos_eliminar()">Cancelar</button>
                             <button type="submit" class="btn btn-warning" id="botonEliminar">Eliminar</button>
                         </div>                
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form id="ranking-form" method="POST" name="ranking_form">
+            <div class="modal fade" id="rankear" role="dialog" data-backdrop="static" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h5 class="modal-title" id="titulo">Ranking de usuarios</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col col-md-7">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th><b>Usuario</b></th>
+                                                    <th><b>Puntaje</b></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php ver_ranking(); ?>
+                                            </tbody>
+                                        </table>
+                                </div>
+                            </div>
+                        </div>               
                     </div>
                 </div>
             </div>
